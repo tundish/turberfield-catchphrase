@@ -1,0 +1,11 @@
+include LICENSE
+recursive-include . *.cfg
+recursive-include . *.css
+recursive-include . *.hex
+recursive-include . *.mp3
+recursive-include . *.otf
+recursive-include . *.rst
+recursive-include . *.svg
+recursive-include . *.woff
+recursive-include . *.woff2
+global-exclude uuid.hex
