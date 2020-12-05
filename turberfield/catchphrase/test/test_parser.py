@@ -115,6 +115,23 @@ class ParserTests(unittest.TestCase):
         rv = dict(CommandParser.expand_commands(func, ensemble=[thing]))
         self.assertIn("pick up thing", rv)
 
+    def test_expand_commands_sequence_synonyms_no_preserver(self):
+
+        thing = DataObject(names=["thing", "doobrey"])
+        idea = DataObject(names=["idea"])
+
+        def func(obj: [object, DataObject]):
+            """
+            pick up a {obj.names[0]} | grab a {obj.names[0]}
+            pick up a {obj.names[1]} | grab a {obj.names[1]}
+            """
+
+        rv = dict(CommandParser.expand_commands(func, ensemble=[idea, thing, idea]))
+        self.assertIn("pick up thing", rv)
+        self.assertIn("pick up doobrey", rv)
+        self.assertIn("grab thing", rv)
+        self.assertIn("grab doobrey", rv)
+
     def test_expand_commands_with_preserver(self):
 
         thing = DataObject(name="thing")

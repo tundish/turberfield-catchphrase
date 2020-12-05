@@ -42,7 +42,11 @@ class CommandParser:
     @staticmethod
     def parse_tokens(text, preserver=".", discard=None):
         discard = discard or set()
-        return [i for i in text.rstrip(preserver).lower().split() if i not in discard or text.endswith(preserver)]
+        return [
+            i.strip()
+            for i in text.rstrip(preserver).lower().split()
+            if i not in discard or text.endswith(preserver)
+        ]
 
     @staticmethod
     def expand_commands(method, ensemble=[]):
@@ -54,7 +58,7 @@ class CommandParser:
 
         """
         doc = method.func.__doc__ if hasattr(method, "func") else method.__doc__
-        terms = filter(None, (i.strip() for line in doc.splitlines() for i in line.split("|")))
+        terms = list(filter(None, (i.strip() for line in doc.splitlines() for i in line.split("|"))))
         params = list(itertools.chain(
             list(CommandParser.unpack_annotation(p.name, p.annotation, ensemble))
             for p in inspect.signature(method, follow_wrapped=True).parameters.values()
