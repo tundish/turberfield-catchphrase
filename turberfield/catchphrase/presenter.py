@@ -97,7 +97,7 @@ class Presenter:
 
     def animate(self, frame, dwell=0.3, pause=1, react=True):
         """ Return the next shot of dialogue as an animated frame."""
-        if not frame[Model.Condition] or any([Performer.allows(i) for i in frame[Model.Condition]]):
+        if all([Performer.allows(i) for i in frame[Model.Condition]]):
             frame[Model.Line] = list(
                 self.animate_lines(frame[Model.Line], dwell, pause)
             )
