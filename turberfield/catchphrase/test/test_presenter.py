@@ -37,4 +37,4 @@ class PresenterTests(unittest.TestCase):
         self.assertTrue(Presenter.allows(c))
 
         c = Model.Condition(obj, "state", "4", None)
-        self.assertTrue(Presenter.allows(c))
+        self.assertFalse(Presenter.allows(c))

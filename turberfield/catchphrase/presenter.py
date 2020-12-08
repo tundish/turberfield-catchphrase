@@ -42,7 +42,8 @@ class Presenter:
         if item.attr == "state" and isinstance(item.object, Stateful):
             value = item.object.get_state(type(item.val))
         else:
-            value = operator.attrgetter(item.attr)(item.object)
+            fmt = "".join(("{0.", item.attr, "}"))
+            value = fmt.format(item.object)
         op = item.operator or operator.eq
         return op(value, item.val)
 
