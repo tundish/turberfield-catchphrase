@@ -26,9 +26,75 @@ from turberfield.dialogue.types import Stateful
 
 class PresenterTests(unittest.TestCase):
 
+    def test_condition_bad(self):
+        obj = types.SimpleNamespace(name="test")
+        c = Model.Condition(obj, "g:n[0]m*e", "test", None)
+        self.assertFalse(Presenter.allows(c))
+
+    def test_condition_complex(self):
+        obj = types.SimpleNamespace(
+            a={
+                "b": types.SimpleNamespace(
+                    c=[
+                        types.SimpleNamespace(d="foo"),
+                        types.SimpleNamespace(e="bar")
+                    ]
+                )
+            }
+        )
+        c = Model.Condition(obj, "a[b].c[1].e", "bar", None)
+        self.assertTrue(Presenter.allows(c))
+
+    def test_condition_dict(self):
+        obj = types.SimpleNamespace(
+            a={"b": types.SimpleNamespace(c="test")}
+        )
+        c = Model.Condition(obj, "a[b].c", "test", None)
+        self.assertTrue(Presenter.allows(c))
+
+        c = Model.Condition(obj, "a[f].c", "test", None)
+        self.assertFalse(Presenter.allows(c))
+
+    def test_condition_float(self):
+        obj = types.SimpleNamespace(value=1.234)
+        c = Model.Condition(obj, "value:04.1f", "01.2", None)
+        self.assertTrue(Presenter.allows(c))
+
+    def test_condition_list(self):
+        obj = types.SimpleNamespace(
+            a=["foo", "bar"]
+        )
+        c = Model.Condition(obj, "a[0]", "foo", None)
+        self.assertTrue(Presenter.allows(c))
+
+        c = Model.Condition(obj, "a[2]", "foo", None)
+        self.assertFalse(Presenter.allows(c))
+
+    def test_condition_missing(self):
+        obj = types.SimpleNamespace(name="test")
+        c = Model.Condition(obj, "gnome", "test", None)
+        self.assertFalse(Presenter.allows(c))
+
+    def test_condition_mistyped(self):
+        obj = types.SimpleNamespace(name="test")
+        c = Model.Condition(obj, "name:02d", "test", None)
+        self.assertFalse(Presenter.allows(c))
+
     def test_condition_simple(self):
         obj = types.SimpleNamespace(name="test")
         c = Model.Condition(obj, "name", "test", None)
+        self.assertTrue(Presenter.allows(c))
+
+        c = Model.Condition(obj, "name", "toast", None)
+        self.assertFalse(Presenter.allows(c))
+
+    def test_condition_nested(self):
+        obj = types.SimpleNamespace(
+            a=types.SimpleNamespace(
+                b=types.SimpleNamespace(c="test")
+            )
+        )
+        c = Model.Condition(obj, "a.b.c", "test", None)
         self.assertTrue(Presenter.allows(c))
 
     def test_condition_state(self):

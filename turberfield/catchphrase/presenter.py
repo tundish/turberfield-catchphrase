@@ -40,12 +40,19 @@ class Presenter:
     @staticmethod
     def allows(item: Model.Condition):
         if item.attr == "state" and isinstance(item.object, Stateful):
-            value = item.object.get_state(type(item.val))
+            lhs = item.object.get_state(type(item.val))
+            rhs = item.val
         else:
             fmt = "".join(("{0.", item.attr, "}"))
-            value = fmt.format(item.object)
+            try:
+                lhs = fmt.format(item.object)
+            except (AttributeError, IndexError, KeyError, ValueError):
+                return False
+            else:
+                rhs = str(item.val)
+
         op = item.operator or operator.eq
-        return op(value, item.val)
+        return op(lhs, rhs)
 
     @staticmethod
     def animate_audio(seq):
