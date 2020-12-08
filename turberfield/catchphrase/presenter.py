@@ -22,19 +22,29 @@ from collections import namedtuple
 import itertools
 import logging
 import math
+import operator
 
 from turberfield.dialogue.model import Model
-from turberfield.dialogue.performer import Performer
+from turberfield.dialogue.types import Stateful
 from turberfield.dialogue.types import DataObject
 
 
 class Settings(DataObject):
     pass
 
+
 class Presenter:
 
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
 
+    @staticmethod
+    def allows(item: Model.Condition):
+        if item.attr == "state" and isinstance(item.object, Stateful):
+            value = item.object.get_state(type(item.val))
+        else:
+            value = operator.attrgetter(item.attr)(item.object)
+        op = item.operator or operator.eq
+        return op(value, item.val)
 
     @staticmethod
     def animate_audio(seq):
@@ -92,12 +102,12 @@ class Presenter:
     def pending(self) -> int:
         return len([
             frame for frame in self.frames
-            if not frame[Model.Condition] or any([Performer.allows(i) for i in frame[Model.Condition]])
+            if not frame[Model.Condition] or any([self.allows(i) for i in frame[Model.Condition]])
         ])
 
     def animate(self, frame, dwell=0.3, pause=1, react=True):
         """ Return the next shot of dialogue as an animated frame."""
-        if all([Performer.allows(i) for i in frame[Model.Condition]]):
+        if all([self.allows(i) for i in frame[Model.Condition]]):
             frame[Model.Line] = list(
                 self.animate_lines(frame[Model.Line], dwell, pause)
             )
