@@ -84,15 +84,18 @@ class Presenter:
         )
 
     @staticmethod
-    def build_shots(*args, shot="Drama", entity="NARRATOR"):
+    def build_shots(*args, shot="Drama", entity=""):
         shots = itertools.repeat(shot) if isinstance(shot, str) else shot
         entities = itertools.repeat(entity) if isinstance(entity, str) else entity
         for shot, arg in zip(shots, args):
             under = "-" * len(shot)
             lines = [arg] if isinstance(arg, str) else arg
-            yield f"\n\n{shot}\n{under}\n\n"
+            yield f"\n\n{shot}\n{under}\n"
             for entity, line in zip(entities, lines):
-                yield f"[{entity}]_\n\n    {line}"
+                if entity:
+                    yield f"\n[{entity}]_\n\n    {line}\n"
+                else:
+                    yield line + "\n"
 
     @staticmethod
     def refresh_animations(frame, min_val=8):
