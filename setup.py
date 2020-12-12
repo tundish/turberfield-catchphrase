@@ -45,7 +45,7 @@ setup(
         "turberfield.catchphrase": [],
     },
     install_requires=[
-        "turberfield-dialogue>=0.27.0",
+        "turberfield-dialogue>=0.28.0",
     ],
     extras_require={},
     tests_require=[],
