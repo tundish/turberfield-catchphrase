@@ -49,7 +49,7 @@ class Drama:
             self.load(i)
 
     def __call__(self, fn, *args, **kwargs):
-        self.input_text = args and args[0]
+        self.input_text = args and args[0] or ""
 
         if fn is None:
             yield self.refusal
