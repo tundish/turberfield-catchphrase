@@ -24,7 +24,7 @@ from turberfield.dialogue.model import Model
 from turberfield.dialogue.types import Stateful
 
 
-class PresenterTests(unittest.TestCase):
+class PresenterAllowsTests(unittest.TestCase):
 
     def test_condition_bad(self):
         obj = types.SimpleNamespace(name="test")
@@ -104,3 +104,12 @@ class PresenterTests(unittest.TestCase):
 
         c = Model.Condition(obj, "state", "4", None)
         self.assertFalse(Presenter.allows(c))
+
+class PresenterBuildShots(unittest.TestCase):
+
+    def test_simple(self):
+        line = "Single line drama."
+        rv = "\n".join(Presenter.build_shots(line))
+        self.assertIn(line, rv)
+        self.assertIn("Drama\n-----", rv)
+        self.assertIn("[NARRATOR]_", rv)
