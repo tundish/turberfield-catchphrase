@@ -77,11 +77,9 @@ class Drama:
             or difflib.get_close_matches(text.strip(), options, cutoff=cutoff)
         )
         try:
-            fn, kwargs = options[matches[0]][0] # TODO: sort via some key?
+            yield from ((fn, [text], kwargs) for fn, kwargs in options[matches[0]])
         except (IndexError, KeyError):
-            return (None, [], {})
-        else:
-            return (fn, [text], kwargs)
+            yield (None, [], {})
 
     def do_help(self, key, text):
         """
