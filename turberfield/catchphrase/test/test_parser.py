@@ -37,6 +37,7 @@ class ParserTests(unittest.TestCase):
 
     def test_unpack_annotation_single_enum(self):
         rv = list(CommandParser.unpack_annotation("locn", ParserTests.Location, ensemble=[]))
+        self.assertTrue(rv)
         self.assertTrue(all(isinstance(i, tuple) for i in rv), rv)
         self.assertEqual(
             len([v for i in ParserTests.Location for v in ([i.value] if isinstance(i.value, str) else i.value)]),
