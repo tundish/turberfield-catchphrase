@@ -66,16 +66,18 @@ class Drama:
         return list({i for s in self.lookup.values() for i in s}) + [self]
 
     def match_tokens(self, text, ensemble=[], cutoff=0.95):
-        options = dict(
-            i for fn in self.active for i in CommandParser.expand_commands(fn, ensemble + list(self.ensemble))
-        )
+        options = defaultdict(list)
+        for fn in self.active:
+            for k, v in CommandParser.expand_commands(fn, ensemble + list(self.ensemble)):
+                options[k].append(v)
+
         tokens = CommandParser.parse_tokens(text, discard=CommandParser.discard)
         matches = (
             difflib.get_close_matches(" ".join(tokens), options, cutoff=cutoff)
             or difflib.get_close_matches(text.strip(), options, cutoff=cutoff)
         )
         try:
-            fn, kwargs = options[matches[0]]
+            fn, kwargs = options[matches[0]][0] # TODO: sort via some key?
         except (IndexError, KeyError):
             return (None, [], {})
         else:
