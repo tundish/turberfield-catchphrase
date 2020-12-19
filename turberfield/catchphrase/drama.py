@@ -81,6 +81,9 @@ class Drama:
         except (IndexError, KeyError):
             yield (None, [], {})
 
+    def interpret(self, options):
+        return next(iter(options), "")
+
     def do_help(self, key, text):
         """
         help | ?
