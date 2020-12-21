@@ -9,7 +9,7 @@ from setuptools import setup
 
 try:
     # For setup.py install
-    from turberfield.punchline import __version__ as version
+    from turberfield.catchphrase import __version__ as version
 except ImportError:
     # For pip installations
     version = str(ast.literal_eval(
