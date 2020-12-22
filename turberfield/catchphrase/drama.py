@@ -47,6 +47,7 @@ class Drama:
         self.history = []
         for i in self.build():
             self.load(i)
+        self.input_text = ""
 
     def __call__(self, fn, *args, **kwargs):
         self.input_text = args and args[0] or ""
