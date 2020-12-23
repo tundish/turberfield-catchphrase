@@ -66,6 +66,10 @@ class Drama:
     def ensemble(self):
         return list({i for s in self.lookup.values() for i in s}) + [self]
 
+    @property
+    def turns(self):
+        return len(self.history)
+
     def match_tokens(self, text, ensemble=[], cutoff=0.95):
         options = defaultdict(list)
         for fn in self.active:
