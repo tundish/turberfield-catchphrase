@@ -104,7 +104,7 @@ class Presenter:
             try:
                 last_anim = frame[typ][-1]
                 rv = max(rv, math.ceil(last_anim.delay + last_anim.duration))
-            except IndexError:
+            except (IndexError, TypeError):
                 continue
         return rv
 
