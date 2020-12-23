@@ -102,9 +102,9 @@ class Presenter:
         rv = min_val
         for typ in (Model.Line, Model.Still, Model.Audio):
             try:
-                last_anim = frame[typ][-1]
+                last_anim = next(filter(reversed(frame[typ]))[-1]
                 rv = max(rv, math.ceil(last_anim.delay + last_anim.duration))
-            except (IndexError, TypeError):
+            except (IndexError, TypeError) as e:
                 continue
         return rv
 
