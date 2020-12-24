@@ -101,8 +101,6 @@ class Drama:
         hints = "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
         yield textwrap.dedent("""
 
-        *{text}*
-
         Here are some commands to try:
 
         {hints}
