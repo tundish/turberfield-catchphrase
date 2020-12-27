@@ -32,7 +32,7 @@ class CommandParser:
         for t in terms:
             if issubclass(t, enum.Enum):
                 yield from (
-                    (name, v) for i in t for v in (
+                    (name, i) for i in t for v in (
                         [i.value] if isinstance(i.value, str) else i.value
                     )
                 )

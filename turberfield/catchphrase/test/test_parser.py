@@ -55,6 +55,8 @@ class ParserTests(unittest.TestCase):
         rv = list(CommandParser.unpack_annotation("item", [ParserTests.Location, Season], ensemble=[]))
         self.assertTrue(rv)
         self.assertTrue(all(isinstance(i, tuple) for i in rv), rv)
+        self.assertTrue(all(isinstance(i[0], str) for i in rv), rv)
+        self.assertTrue(all(isinstance(i[1], enum.Enum) for i in rv), rv)
         self.assertEqual(
             len([
                 v for i in list(ParserTests.Location) + list(Season)
