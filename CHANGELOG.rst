@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.4.0
+=====
+
+* Numerous fixes in step with Tea and Sympathy.
+
 0.3.0
 =====
 
