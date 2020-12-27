@@ -10,9 +10,9 @@ import random
 import textwrap
 import random
 
+from turberfield.catchphrase.parser import CommandParser
 from turberfield.dialogue.types import DataObject
 from turberfield.dialogue.types import Stateful
-from catchphrase.parser import CommandParser
 
 # From Addison Arches
 from collections import namedtuple
@@ -46,7 +46,7 @@ class Drama:
         self.active = set([self.do_help])
         self.history = []
         for i in self.build():
-            self.load(i)
+            self.add(i)
         self.input_text = ""
 
     def __call__(self, fn, *args, **kwargs):
@@ -58,8 +58,8 @@ class Drama:
             self.history.append((fn, args, kwargs))
             yield from fn(fn, *args, **kwargs)
 
-    def load(self, item):
-        for n in getattr(item, "names", None):
+    def add(self, item):
+        for n in getattr(item, "names", []):
             self.lookup[n].add(item)
 
     @property
