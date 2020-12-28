@@ -68,7 +68,7 @@ class Drama:
         self.input_text = args and args[0] or ""
 
         if fn is None:
-            yield self.refusal
+            yield "\n{0}\n".format(self.refusal)
         else:
             self.history.append((fn, args, kwargs))
             yield from fn(fn, *args, **kwargs)
