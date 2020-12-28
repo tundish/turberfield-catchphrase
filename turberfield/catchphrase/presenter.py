@@ -91,7 +91,8 @@ class Presenter:
             shot = next(shots, "")
             under = "-" * len(shot)
             lines = [arg] if isinstance(arg, str) else arg
-            yield f"\n\n{shot}\n{under}\n"
+            if shot:
+                yield f"\n\n{shot}\n{under}\n"
             for entity, line in zip(entities, lines):
                 if entity:
                     yield f"\n[{entity}]_\n\n    {line}\n"
