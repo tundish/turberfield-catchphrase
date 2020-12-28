@@ -125,7 +125,7 @@ class PresenterBuildShots(unittest.TestCase):
 
     def test_multiline_shot(self):
         lines = ["Say hello.", "Wave goodbye"]
-        rv = "\n".join(Presenter.build_shots(lines, shot="Epilogue", entity="NARRATOR"))
+        rv = "\n".join(Presenter.build_shots(*lines, shot="Epilogue", entity="NARRATOR"))
         self.assertEqual(1, rv.count("Epilogue\n-----"))
         self.assertEqual(2, rv.count("[NARRATOR]_"))
 

@@ -85,9 +85,10 @@ class Presenter:
 
     @staticmethod
     def build_shots(*args, shot="", entity=""):
-        shots = itertools.repeat(shot) if isinstance(shot, str) else shot
+        shots = iter([shot]) if isinstance(shot, str) else iter(shot)
         entities = itertools.repeat(entity) if isinstance(entity, str) else entity
-        for shot, arg in zip(shots, args):
+        for arg in args:
+            shot = next(shots, "")
             under = "-" * len(shot)
             lines = [arg] if isinstance(arg, str) else arg
             yield f"\n\n{shot}\n{under}\n"
