@@ -26,6 +26,7 @@ import math
 import operator
 
 from turberfield.dialogue.model import Model
+from turberfield.dialogue.model import SceneScript
 from turberfield.dialogue.types import Stateful
 from turberfield.dialogue.types import DataObject
 
