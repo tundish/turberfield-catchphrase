@@ -19,6 +19,7 @@
 from collections import defaultdict
 from collections import deque
 from collections import namedtuple
+import importlib.resources
 import itertools
 import logging
 import math
@@ -28,7 +29,7 @@ from turberfield.dialogue.model import Model
 from turberfield.dialogue.types import Stateful
 from turberfield.dialogue.types import DataObject
 
-
+# TODO: Remove to Renderer
 class Settings(DataObject):
     pass
 
@@ -36,6 +37,22 @@ class Settings(DataObject):
 class Presenter:
 
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
+
+    @staticmethod
+    def load_dialogue(pkg, resource):
+        with importlib.resources.path(pkg, resource) as path:
+            return path.read_text(encoding="utf-8")
+
+    @staticmethod
+    def build_from_folder(*args, folder, ensemble=[], strict=True, roles=1):
+        for p in folder.paths:
+            text = "{0}\n{1}".format(Presenter.load_dialogue(folder.pkg, p), "\n".join(args))
+            script = SceneScript("inline", doc=SceneScript.read(text))
+            selection = script.select(ensemble, roles=roles)
+            if (selection and all(selection.values())) or (not strict and any(selection.values())):
+                script.cast(selection)
+                model = script.run()
+                return Presenter(model, ensemble=ensemble)
 
     @staticmethod
     def allows(item: Model.Condition):
@@ -85,6 +102,7 @@ class Presenter:
 
     @staticmethod
     def build_shots(*args, shot="", entity=""):
+        """ TODO: Move to Drama class. """
         shots = iter([shot]) if isinstance(shot, str) else iter(shot)
         entities = itertools.repeat(entity) if isinstance(entity, str) else entity
         for arg in args:
