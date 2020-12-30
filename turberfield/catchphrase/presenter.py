@@ -19,6 +19,7 @@
 from collections import defaultdict
 from collections import deque
 from collections import namedtuple
+import functools
 import importlib.resources
 import itertools
 import logging
@@ -40,6 +41,7 @@ class Presenter:
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
 
     @staticmethod
+    @functools.cache
     def load_dialogue(pkg, resource):
         with importlib.resources.path(pkg, resource) as path:
             return path.read_text(encoding="utf-8")
