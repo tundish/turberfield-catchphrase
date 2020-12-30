@@ -48,14 +48,14 @@ class Presenter:
 
     @staticmethod
     def build_from_folder(*args, folder, ensemble=[], strict=True, roles=1):
-        for p in folder.paths:
+        for n, p in enumerate(folder.paths):
             text = "{0}\n{1}".format(Presenter.load_dialogue(folder.pkg, p), "\n".join(args))
             script = SceneScript("inline", doc=SceneScript.read(text))
             selection = script.select(ensemble, roles=roles)
             if (selection and all(selection.values())) or (not strict and any(selection.values())):
                 script.cast(selection)
                 model = script.run()
-                return Presenter(model, ensemble=ensemble)
+                return (n, Presenter(model, ensemble=ensemble))
 
     @staticmethod
     def allows(item: Model.Condition):
