@@ -4,8 +4,10 @@ Catchphrase
 Catchphrase provides software components to build
 parser-based interactive fiction for the web.
 
-This framework makes heavy use of the turberfield-dialogue_ library.
+For a demonstration of such a project, see the repository `tea-and-sympathy`_.
+You are free to download and experiment with that example.
 
+This framework makes heavy use of the turberfield-dialogue_ library.
 The documentation is at an early stage.
 
 Framework
@@ -54,3 +56,4 @@ The Renderer is a namespace for functions which generate HTML5 elements from Pre
 There is also support for plain text output.
 
 .. _turberfield-dialogue: https://github.com/tundish/turberfield-dialogue
+.. _tea-and-sympathy: https://github.com/tundish/tea-and-sympathy
