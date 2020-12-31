@@ -4,6 +4,8 @@ Catchphrase
 Catchphrase provides software components to build
 parser-based interactive fiction for the web.
 
+Catchphrase is a Python library, and part of the `Turberfield` namespace.
+
 For a demonstration of such a project, see the repository `tea-and-sympathy`_.
 You are free to download and experiment with that example.
 

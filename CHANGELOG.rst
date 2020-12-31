@@ -11,6 +11,7 @@ Change Log
 
 * Numerous fixes in step with Tea and Sympathy.
 * Added the `render` module.
+* First release to PyPI.
 
 0.3.0
 =====
