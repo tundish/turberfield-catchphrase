@@ -10,6 +10,7 @@ Change Log
 =====
 
 * Numerous fixes in step with Tea and Sympathy.
+* Added the `render` module.
 
 0.3.0
 =====
