@@ -18,6 +18,7 @@ import re
 
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.dialogue.model import Model
+from turberfield.dialogue.types import DataObject
 
 """
 catchphrase-banner
@@ -30,6 +31,9 @@ catchphrase-colour-shadows
     A reference to a theme-specific colour variable.
 
 """
+
+class Settings(DataObject):
+    pass
 
 
 class Renderer:

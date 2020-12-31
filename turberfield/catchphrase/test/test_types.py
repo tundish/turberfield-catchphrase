@@ -5,7 +5,7 @@ import textwrap
 import uuid
 
 from turberfield.catchphrase.presenter import Presenter
-from turberfield.catchphrase.presenter import Settings # or render?
+from turberfield.catchphrase.render import Settings
 
 from turberfield.dialogue.model import SceneScript
 from turberfield.dialogue.model import Model
