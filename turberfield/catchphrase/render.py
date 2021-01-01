@@ -198,7 +198,8 @@ pattern="{validator.pattern}"
 
     @staticmethod
     @functools.lru_cache()
-    def render_body_html(title="", refresh=None, next_="", site_url="/"):
+    def render_body_html(title="", refresh=None, next_="", base_style="/css/base/catchphrase.css"):
+        base_link = '<link rel="stylesheet" href="{0}" />'.format(base_style) if base_style else ""
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -207,7 +208,7 @@ pattern="{validator.pattern}"
 {'<meta http-equiv="refresh" content="{0};{1}">'.format(refresh, next_) if refresh and next_ else ''}
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <title>{title}</title>
-<link rel="stylesheet" href="{site_url}css/catchphrase.css" />
+{base_link}
 {{0}}
 </head>
 <body>

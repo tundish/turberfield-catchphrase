@@ -1,0 +1,221 @@
+/* Base : Grid : Objects : State: Theme */
+
+/*  Base    */
+
+* {
+box-sizing: border-box;
+border: 0;
+font: inherit;
+font-size: 100%;
+line-height: 1.2em;
+list-style-type: none;
+margin: 0;
+outline: 0;
+padding: 0;
+text-decoration: none;
+vertical-align: baseline;
+}
+
+button, input, select, textarea {
+font-family: inherit;
+font-size: 100%;
+}
+
+/*  Grid and Flex */
+
+.catchphrase-banner {
+justify-content: right;
+background-color: var(--catchphrase-colour-washout, whitesmoke);
+color: var(--catchphrase-colour-shadows, grey);
+display: flex;
+flex-direction: row;
+font-family: monospace;
+font-variant: small-caps;
+padding-left: 1.0rem;
+padding-right: 1.2rem;
+text-transform: lowercase;
+}
+
+div.catchphrase-reveal {
+display: flex;
+flex-direction: column;
+}
+
+div.catchphrase-reveal nav ul {
+display: flex;
+flex-direction: row;
+justify-content: left;
+}
+
+aside.catchphrase-reveal {
+align-items: center;
+background-color: var(--catchphrase-colour-shadows, grey);
+border-left: 1rem solid var(--catchphrase-colour-washout, whitesmoke);
+}
+
+@media screen and (max-width: 1024px) {
+
+.catchphrase-banner {
+display: none;
+}
+
+}
+
+main {
+flex-grow: 1;
+padding: 0.5rem;
+padding-left: 1.0rem;
+padding-top: 0.9rem;
+}
+
+/*  Objects  */
+
+.catchphrase-reveal ul {
+padding: 0.5em;
+}
+
+.catchphrase-reveal li {
+animation-name: fadeinout;
+animation-fill-mode: both;
+padding-bottom: 1.3rem;
+}
+
+.catchphrase-reveal li:last-of-type {
+animation-name: fadein;
+}
+
+.catchphrase-reveal blockquote header {
+font-family: sans-serif;
+font-style: oblique;
+margin: 0.25rem 0 0.25rem 0;
+}
+
+.catchphrase-reveal blockquote > ul li {
+animation-name: fadein;
+font-family: serif;
+font-size: 1.3rem;
+font-style: normal;
+letter-spacing: 0.11rem;
+padding-left: 2rem;
+}
+
+.catchphrase-reveal p {
+font-family: serif;
+font-size: 1.3rem;
+font-style: normal;
+letter-spacing: 0.11rem;
+}
+
+.catchphrase-reveal blockquote > header:empty + p {
+letter-spacing: 0.125rem;
+}
+
+
+/*  State   */
+
+@keyframes fadein {
+0% {
+opacity: 0;
+}
+12% {
+opacity: 1;
+}
+100% {
+opacity: 1;
+}
+}
+
+@keyframes fadeinout {
+0% {
+opacity: 0;
+}
+12% {
+opacity: 1;
+}
+82% {
+opacity: 1;
+}
+100% {
+opacity: 0.6;
+}
+}
+
+
+/*  Theme   */
+
+body {
+border-top: 6rem solid var(--catchphrase-colour-washout, whitesmoke);
+color: var(--catchphrase-colour-shadows, grey);
+}
+
+h1, h2 {
+font-size: 1.4rem;
+letter-spacing: 0.125rem;
+margin: 1rem 0 1rem 1rem;
+}
+
+p {
+padding-left: 1rem;
+}
+
+em {
+font-style: italic;
+}
+
+pre {
+font-variant: small-caps;
+}
+
+strong {
+font-weight: bolder;
+}
+
+img {
+padding: 0.35rem 0.7rem 0.35rem 0.7rem;
+width: 100%;
+}
+
+a {
+color: var(--catchphrase-colour-shadows, grey);
+font-weight: bolder;
+padding-left: 0.5em;
+padding-right: 0.5em;
+}
+
+li a {
+border-left: 1px solid var(--catchphrase-colour-washout, whitesmoke);
+margin: 0.5rem 0 0.5rem 0;
+}
+
+li a:hover {
+background-color: var(--catchphrase-colour-shadows, grey);
+color: var(--catchphrase-colour-washout, whitesmoke);
+}
+
+
+button {
+border: 2px solid var(--catchphrase-colour-washout, whitesmoke);
+color: var(--catchphrase-colour-shadows, grey);
+margin: 1rem;
+min-width: 6rem;
+padding: 0.6rem;
+width: fit-content(15rem);
+}
+
+button:hover {
+border: 2px solid var(--catchphrase-colour-shadows, grey);
+}
+
+button, label {
+letter-spacing: 0.125rem;
+font-family: sans-serif;
+font-size: 1.6rem;
+font-style: normal;
+}
+
+input {
+font-family: sans-serif;
+font-size: 1.6rem;
+font-style: normal;
+width: 24rem;
+}

@@ -42,7 +42,7 @@ setup(
         "turberfield.catchphrase.test",
     ],
     package_data={
-        "turberfield.catchphrase": [],
+        "turberfield.catchphrase": ["css/*.css"],
     },
     install_requires=[
         "turberfield-dialogue>=0.28.0",

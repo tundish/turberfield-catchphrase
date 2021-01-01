@@ -11,6 +11,7 @@ Change Log
 
 * Some refactoring to the render module.
 * Fix a bug in calculating page media refresh time.
+* Add base style `catchphrase.css`.
 
 0.4.0
 =====
