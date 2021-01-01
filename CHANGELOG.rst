@@ -9,7 +9,8 @@ Change Log
 0.5.0
 =====
 
-* Some refactoring to render module.
+* Some refactoring to the render module.
+* Fix a bug in calculating page media refresh time.
 
 0.4.0
 =====
