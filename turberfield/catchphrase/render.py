@@ -47,6 +47,14 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
 </div>"""
 
     @staticmethod
+    def animate_controls(*args, delay=0, dwell=0, pause=0):
+        for arg in args:
+            yield '<li style="animation-delay: {0:.2f}s; animation-duration: {1:.2f}s">'.format(delay, dwell)
+            yield arg.strip()
+            yield "</li>"
+            delay += pause
+
+    @staticmethod
     def animated_line_to_html(anim):
         name = anim.element.persona.name if hasattr(anim.element.persona, "name") else ""
         name = "{0.firstname} {0.surname}".format(name) if hasattr(name, "firstname") else name
@@ -138,12 +146,13 @@ pattern="{validator.pattern}"
         stills = "\n".join(Renderer.animated_still_to_html(i) for i in frame[Model.Still])
         audio = "\n".join(Renderer.animated_audio_to_html(i) for i in frame[Model.Audio])
         last = frame[Model.Line][-1] if frame[Model.Line] else Presenter.Animation(0, 0, None)
-        command_form = "<li>{0}</li>".format(Renderer.render_command_form()) if commands else ""
-        action_forms = "\n".join(
-            "<li>\n{0}\n</li>".format("\n".join(Renderer.render_action_form(list(reversed(op.parameters)))))
-            if hasattr(op, "parameters") else ""
-            for op in options
-        ) if actions else ""
+        controls = [Renderer.render_command_form()] if commands else []
+        if actions:
+            controls.extend(
+                Renderer.render_action_form(list(reversed(op.parameters)))
+                for op in actions if hasattr(op, "parameters")
+            )
+        controls = "\n".join(Renderer.animate_controls(*controls, delay=last.delay + last.duration, dwell=0.3))
         return f"""
 {audio}
 <section class="catchphrase-banner">
@@ -159,9 +168,8 @@ pattern="{validator.pattern}"
 </ul>
 </main>
 <nav>
-<ul style="animation-delay: {last.delay:.2f}s; animation-duration: {last.duration:.2f}s">
-{action_forms}
-{command_form}
+<ul>
+{controls}
 </ul>
 </nav>
 </div>"""

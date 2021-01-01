@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.5.0
+=====
+
+* Some refactoring to render module.
+
 0.4.0
 =====
 
