@@ -39,10 +39,11 @@ setup(
     namespace_packages=["turberfield"],
     packages=[
         "turberfield.catchphrase",
+        "turberfield.catchphrase.css",
         "turberfield.catchphrase.test",
     ],
     package_data={
-        "turberfield.catchphrase": ["css/*.css"],
+        "turberfield.catchphrase.css": ["*.css"],
     },
     install_requires=[
         "turberfield-dialogue>=0.28.0",
