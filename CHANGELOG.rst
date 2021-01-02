@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.6.0
+=====
+
+* Refactored Performer build functions.
+* Add dialogue metadata to publisher object.
+
 0.5.0
 =====
 

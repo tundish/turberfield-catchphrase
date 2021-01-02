@@ -22,7 +22,6 @@ from collections import namedtuple
 import functools
 import importlib.resources
 import itertools
-import logging
 import math
 import operator
 
@@ -45,12 +44,23 @@ class Presenter:
     def build_from_folder(*args, folder, ensemble=[], strict=True, roles=1):
         for n, p in enumerate(folder.paths):
             text = "{0}\n{1}".format(Presenter.load_dialogue(folder.pkg, p), "\n".join(args))
-            script = SceneScript("inline", doc=SceneScript.read(text))
-            selection = script.select(ensemble, roles=roles)
-            if (selection and all(selection.values())) or (not strict and any(selection.values())):
-                script.cast(selection)
-                model = script.run()
-                return (n, Presenter(model, ensemble=ensemble))
+            rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
+            if rv:
+                return (n, rv)
+        else:
+            return (None, None)
+
+    @staticmethod
+    def build_from_text(text, ensemble=[], strict=True, roles=1, path="inline"):
+        script = SceneScript(path, doc=SceneScript.read(text))
+        selection = script.select(ensemble, roles=roles)
+        if all(selection.values()) or (not strict and any(selection.values())):
+            script.cast(selection)
+            model = script.run()
+            rv = Presenter(model, ensemble=ensemble)
+            for k, v in model.metadata:
+                rv.metadata[k].append(v)
+            return rv
 
     @staticmethod
     def allows(item: Model.Condition):
@@ -136,7 +146,7 @@ class Presenter:
             if scene is None or i.scene == scene
         ]
         self.ensemble = ensemble
-        self.log = logging.getLogger(str(getattr(ensemble[0], "id", "")) if ensemble else "")
+        self.metadata = defaultdict(list)
 
     @property
     def pending(self) -> int:

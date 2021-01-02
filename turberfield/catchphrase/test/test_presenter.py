@@ -16,9 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with turberfield.  If not, see <http://www.gnu.org/licenses/>.
 
+import textwrap
 import types
 import unittest
 
+import turberfield.catchphrase
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.types import Stateful
@@ -105,7 +107,30 @@ class PresenterAllowsTests(unittest.TestCase):
         c = Model.Condition(obj, "state", "4", None)
         self.assertFalse(Presenter.allows(c))
 
-class PresenterBuildShots(unittest.TestCase):
+
+class PresenterMetadataTests(unittest.TestCase):
+
+    def test_no_metadata(self):
+        presenter = Presenter.build_from_text("This is a one-liner.")
+        self.assertTrue(hasattr(presenter, "metadata"), presenter)
+        self.assertFalse(presenter.metadata)
+
+    def test_metadata(self):
+        text = textwrap.dedent("""
+        .. |VERSION| property:: turberfield.catchphrase.__version__
+
+        :copyright: 2017
+        :version:   |VERSION|
+        :publisher: Mills
+        :publisher: Boon
+        """)
+        presenter = Presenter.build_from_text(text)
+        self.assertTrue(hasattr(presenter, "metadata"), presenter)
+        self.assertEqual([turberfield.catchphrase.__version__], presenter.metadata["version"])
+        self.assertEqual(2, len(presenter.metadata["publisher"]))
+
+
+class PresenterBuildShotsTests(unittest.TestCase):
 
     def test_simple(self):
         line = "Single line drama."
