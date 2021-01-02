@@ -36,12 +36,7 @@ padding-right: 1.2rem;
 text-transform: lowercase;
 }
 
-div.catchphrase-reveal {
-display: flex;
-flex-direction: column;
-}
-
-div.catchphrase-reveal nav ul {
+nav.catchphrase-reveal ul {
 display: flex;
 flex-direction: row;
 justify-content: left;

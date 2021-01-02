@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.7.0
+=====
+
+* Rendering now better supports grid layout.
+
 0.6.0
 =====
 

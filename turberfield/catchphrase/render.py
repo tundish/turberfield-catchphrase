@@ -161,18 +161,16 @@ pattern="{validator.pattern}"
 <aside class="catchphrase-reveal">
 {stills}
 </aside>
-<div class="catchphrase-reveal">
-<main>
+<main class="catchphrase-reveal">
 <ul>
 {dialogue}
 </ul>
 </main>
-<nav>
+<nav class="catchphrase-reveal">
 <ul>
 {controls}
 </ul>
-</nav>
-</div>"""
+</nav>"""
 
     @staticmethod
     def render_frame_to_terminal(frame, ensemble=[], title="", backnav=""):
