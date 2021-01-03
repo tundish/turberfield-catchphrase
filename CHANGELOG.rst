@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.8.0
+=====
+
+* Enable passing prompt into render.
+
 0.7.0
 =====
 

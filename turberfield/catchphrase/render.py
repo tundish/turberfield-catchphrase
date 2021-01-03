@@ -120,7 +120,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
             yield "</form>"
 
     @staticmethod
-    def render_command_form(validator=re.compile("[\\w ]+")):
+    def render_command_form(placeholder="?", validator=re.compile("[\\w ]+")):
         return f"""
 <form role="form" action="/drama/cmd/" method="POST" name="cmd">
 <fieldset>
@@ -132,7 +132,7 @@ id="input-cmd-text"
 required="required"
 autofocus="autofocus"
 aria-describedby="input-cmd-text"
-placeholder="?"
+placeholder="{placeholder}"
 pattern="{validator.pattern}"
 >
 <button type="submit">Enter</button>
@@ -140,13 +140,17 @@ pattern="{validator.pattern}"
 </form>"""
 
     @staticmethod
-    def render_frame_to_html(frame, ensemble=[], options=[], title="", backnav="", actions=False, commands=True):
+    def render_frame_to_html(
+        frame,
+        ensemble=[], options=[],
+        prompt="?", title="", backnav="", actions=False, commands=True
+    ):
         heading = " ".join("<span>{0}</span>".format(i.capitalize()) for i in title.split(" "))
         dialogue = "\n".join(Renderer.animated_line_to_html(i) for i in frame[Model.Line])
         stills = "\n".join(Renderer.animated_still_to_html(i) for i in frame[Model.Still])
         audio = "\n".join(Renderer.animated_audio_to_html(i) for i in frame[Model.Audio])
         last = frame[Model.Line][-1] if frame[Model.Line] else Presenter.Animation(0, 0, None)
-        controls = [Renderer.render_command_form()] if commands else []
+        controls = [Renderer.render_command_form(placeholder=prompt)] if commands else []
         if actions:
             controls.extend(
                 Renderer.render_action_form(list(reversed(op.parameters)))
