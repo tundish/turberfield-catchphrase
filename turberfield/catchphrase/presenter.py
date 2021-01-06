@@ -109,23 +109,6 @@ class Presenter:
         )
 
     @staticmethod
-    def build_shots(*args, shot="", entity=""):
-        """ TODO: Move to Drama class. """
-        shots = iter([shot]) if isinstance(shot, str) else iter(shot)
-        entities = itertools.repeat(entity) if isinstance(entity, str) else entity
-        for arg in args:
-            shot = next(shots, "")
-            under = "-" * len(shot)
-            lines = [arg] if isinstance(arg, str) else arg
-            if shot:
-                yield f"\n\n{shot}\n{under}\n"
-            for entity, line in zip(entities, lines):
-                if entity:
-                    yield f"\n[{entity}]_\n\n    {line}\n"
-                else:
-                    yield line + "\n"
-
-    @staticmethod
     def refresh_animations(frame, min_val=8):
         rv = min_val
         for typ in (Model.Line, Model.Still, Model.Audio):

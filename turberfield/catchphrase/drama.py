@@ -22,6 +22,7 @@ import enum
 import inspect
 import itertools
 import random
+import re
 import textwrap
 import random
 
@@ -53,6 +54,30 @@ class Drama:
     @staticmethod
     def build():
         return []
+
+    @staticmethod
+    def build_dialogue(*args, shot="", entity=""):
+        shots = iter([shot]) if isinstance(shot, str) else iter(shot)
+        entities = itertools.repeat(entity) if isinstance(entity, str) else entity
+        for arg in args:
+            shot = next(shots, "")
+            under = "-" * len(shot)
+            lines = [arg] if isinstance(arg, str) else arg
+            if shot:
+                yield f"\n\n{shot}\n{under}\n"
+            for entity, line in zip(entities, lines):
+                if entity:
+                    yield f"\n[{entity}]_\n\n    {line}\n"
+                else:
+                    yield line + "\n"
+
+    @staticmethod
+    def safe_substitute(text, *args):
+        slots = re.findall("\{\d+\}", text)
+        if slots:
+            return text.format(*itertools.chain(args, itertools.repeat("", len(slots))))
+        else:
+            return text + "\n".join(args)
 
     def __init__(self, lookup=None, prompt=">", refusal="That is not an option just now.", **kwargs):
         self.lookup = lookup or defaultdict(set)

@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.9.0
+=====
+
+* Moved `build_dialogue` to Drama class.
+* Added `safe_substitute` method.
+
 0.8.0
 =====
 

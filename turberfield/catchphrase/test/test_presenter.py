@@ -128,35 +128,3 @@ class PresenterMetadataTests(unittest.TestCase):
         self.assertTrue(hasattr(presenter, "metadata"), presenter)
         self.assertEqual([turberfield.catchphrase.__version__], presenter.metadata["version"])
         self.assertEqual(2, len(presenter.metadata["publisher"]))
-
-
-class PresenterBuildShotsTests(unittest.TestCase):
-
-    def test_simple(self):
-        line = "Single line drama."
-        rv = "\n".join(Presenter.build_shots(line))
-        self.assertIn(line, rv, rv)
-        self.assertNotIn("-", rv)
-        self.assertNotIn("]_", rv, rv)
-        self.assertTrue(rv.endswith("\n"))
-
-    def test_entity(self):
-        line = "Single line drama."
-        rv = "\n".join(Presenter.build_shots(line, shot="Epilogue", entity="NARRATOR"))
-        self.assertIn(line, rv)
-        self.assertIn("Epilogue\n--------", rv)
-        self.assertIn("[NARRATOR]_", rv)
-        self.assertTrue(rv.endswith("\n"))
-
-    def test_multiline_shot(self):
-        lines = ["Say hello.", "Wave goodbye"]
-        rv = "\n".join(Presenter.build_shots(*lines, shot="Epilogue", entity="NARRATOR"))
-        self.assertEqual(1, rv.count("Epilogue\n-----"))
-        self.assertEqual(2, rv.count("[NARRATOR]_"))
-
-    def test_multishot_lines(self):
-        lines = ["Say hello.", "Wave goodbye"]
-        rv = "\n".join(Presenter.build_shots(*lines, shot=["one", "two"], entity="NARRATOR"))
-        self.assertEqual(1, rv.count("one\n---"), rv)
-        self.assertEqual(1, rv.count("two\n---"), rv)
-        self.assertEqual(2, rv.count("[NARRATOR]_"))
