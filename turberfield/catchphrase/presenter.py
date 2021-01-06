@@ -40,6 +40,7 @@ class Presenter:
         with importlib.resources.path(pkg, resource) as path:
             return path.read_text(encoding="utf-8")
 
+    # TODO: remove
     @staticmethod
     def build_from_folder(*args, folder, ensemble=[], strict=True, roles=1):
         for n, p in enumerate(folder.paths):
