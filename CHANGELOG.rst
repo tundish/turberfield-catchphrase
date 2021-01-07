@@ -6,6 +6,14 @@
 Change Log
 ::::::::::
 
+0.10.0
+======
+
+* Refactor to `Drama.write_dialogue`.
+* Resited some methods from Presenter to Drama.
+* Better unit testing of Drama methods.
+* Flake fixes
+
 0.9.0
 =====
 

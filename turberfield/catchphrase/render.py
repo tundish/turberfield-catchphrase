@@ -15,6 +15,7 @@
 
 import functools
 import re
+import textwrap
 
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.dialogue.model import Model
@@ -114,7 +115,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
                 yield f'<select name="{p.name}">'
                 for v in p.values:
                     yield f'<option value="{v}">{v}</option>'
-                yield f'</select>'
+                yield "</select>"
         if parameters:
             yield "</fieldset>"
             yield "</form>"

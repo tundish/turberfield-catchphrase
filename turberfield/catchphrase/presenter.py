@@ -19,8 +19,6 @@
 from collections import defaultdict
 from collections import deque
 from collections import namedtuple
-import functools
-import importlib.resources
 import itertools
 import math
 import operator
@@ -33,23 +31,6 @@ from turberfield.dialogue.types import Stateful
 class Presenter:
 
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
-
-    @staticmethod
-    @functools.cache
-    def load_dialogue(pkg, resource):
-        with importlib.resources.path(pkg, resource) as path:
-            return path.read_text(encoding="utf-8")
-
-    # TODO: remove
-    @staticmethod
-    def build_from_folder(*args, folder, ensemble=[], strict=True, roles=1):
-        for n, p in enumerate(folder.paths):
-            text = "{0}\n{1}".format(Presenter.load_dialogue(folder.pkg, p), "\n".join(args))
-            rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
-            if rv:
-                return (n, rv)
-        else:
-            return (None, None)
 
     @staticmethod
     def build_from_text(text, ensemble=[], strict=True, roles=1, path="inline"):

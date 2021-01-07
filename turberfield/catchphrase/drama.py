@@ -18,17 +18,14 @@
 
 from collections import defaultdict
 import difflib
-import enum
-import inspect
+import functools
+import importlib.resources
 import itertools
 import random
 import re
 import textwrap
-import random
 
 from turberfield.catchphrase.parser import CommandParser
-from turberfield.dialogue.types import DataObject
-from turberfield.dialogue.types import Stateful
 
 # From Addison Arches
 from collections import namedtuple
@@ -43,6 +40,7 @@ class Drama:
 
     @classmethod
     def param(cls, name, required, regex, values, tip):
+        """ Experimental. Do not use. """
         def decorator(method):
             p = cls.Parameter(name, required, regex, values, tip)
             if not hasattr(method, "parameters"):
@@ -54,6 +52,12 @@ class Drama:
     @staticmethod
     def build():
         return []
+
+    @staticmethod
+    @functools.cache
+    def load_dialogue(pkg, resource):
+        with importlib.resources.path(pkg, resource) as path:
+            return path.read_text(encoding="utf-8")
 
     @staticmethod
     def build_dialogue(*args, shot="", entity=""):
@@ -72,12 +76,21 @@ class Drama:
                     yield line + "\n"
 
     @staticmethod
-    def safe_substitute(text, *args):
-        slots = re.findall("\{\d+\}", text)
-        if slots:
-            return text.format(*itertools.chain(args, itertools.repeat("", len(slots))))
+    def write_dialogue(text, *args, shot="Drama dialogue", entity=""):
+        # Find how many format parameters there are in the dialogue text
+        slots = set(re.findall("\{\d+\}", text))
+        if not slots:
+            # Append drama dialogue to end of text
+            dialogue = Drama.build_dialogue(*args, entity=entity)
+            return "{0}\n{1}".format(text, "".join(tuple(dialogue)))
+        elif len(slots) == 1:
+            # Bind dialogue as a single shot to the format parameter
+            dialogue = "\n".join(Drama.build_dialogue(*args, shot=shot, entity=entity))
+            return text.format(dialogue)
         else:
-            return text + "\n".join(args)
+            # Bind each line of dialogue to its own format parameter
+            dialogue = Drama.build_dialogue(*args, entity=entity)
+            return text.format(*itertools.chain(dialogue, itertools.repeat("", len(slots))))
 
     def __init__(self, lookup=None, prompt=">", refusal="That is not an option just now.", **kwargs):
         self.lookup = lookup or defaultdict(set)
