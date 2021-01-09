@@ -114,6 +114,14 @@ class Presenter:
         self.metadata = defaultdict(list)
 
     @property
+    def dwell(self) -> float:
+        return float(next(reversed(self.metadata["dwell"]), "0.3"))
+
+    @property
+    def pause(self) -> float:
+        return float(next(reversed(self.metadata["pause"]), "1.0"))
+
+    @property
     def pending(self) -> int:
         return len([
             frame for frame in self.frames

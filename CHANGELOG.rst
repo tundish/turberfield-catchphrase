@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.11.0
+======
+
+* Add `dwell` property to Presenter.
+* Add `pause` property to Presenter.
+
 0.10.0
 ======
 

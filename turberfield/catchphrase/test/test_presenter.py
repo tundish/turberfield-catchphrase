@@ -128,3 +128,17 @@ class PresenterMetadataTests(unittest.TestCase):
         self.assertTrue(hasattr(presenter, "metadata"), presenter)
         self.assertEqual([turberfield.catchphrase.__version__], presenter.metadata["version"])
         self.assertEqual(2, len(presenter.metadata["publisher"]))
+
+    def test_timing_defaults(self):
+        presenter = Presenter.build_from_text("")
+        self.assertEqual(0.3, presenter.dwell)
+        self.assertEqual(1.0, presenter.pause)
+
+    def test_timing_override(self):
+        text = textwrap.dedent("""
+        :dwell: 0.25
+        :pause: 0
+        """)
+        presenter = Presenter.build_from_text(text)
+        self.assertEqual(0.25, presenter.dwell)
+        self.assertEqual(0.0, presenter.pause)
