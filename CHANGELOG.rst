@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.12.0
+======
+
+* `Drama.match` yields the original text when a command is unmatched.
+
 0.11.0
 ======
 

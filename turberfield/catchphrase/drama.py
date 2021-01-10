@@ -137,7 +137,7 @@ class Drama:
         try:
             yield from ((fn, [text], kwargs) for fn, kwargs in options[matches[0]])
         except (IndexError, KeyError):
-            yield (None, [], {})
+            yield (None, [text], {})
 
     def interpret(self, options):
         return next(iter(options), "")

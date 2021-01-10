@@ -54,6 +54,24 @@ class DramaBuildDialogueTests(unittest.TestCase):
         self.assertEqual(2, rv.count("[NARRATOR]_"))
 
 
+class DramaMatchTests(unittest.TestCase):
+
+    def test_do_help(self):
+        drama = Drama()
+        fn, args, kwargs = next(drama.match("help"))
+        self.assertEqual(drama.do_help, fn)
+        self.assertEqual(["help"], args)
+        self.assertFalse(kwargs)
+
+    def test_mismatch(self):
+        drama = Drama()
+        cmd = "release the frog"
+        fn, args, kwargs = next(drama.match(cmd))
+        self.assertIs(None, fn)
+        self.assertEqual([cmd], args)
+        self.assertFalse(kwargs)
+
+
 class DramaWriteDialogueTests(unittest.TestCase):
 
     def test_append_simple(self):
