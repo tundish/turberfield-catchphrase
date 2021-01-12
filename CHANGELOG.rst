@@ -11,6 +11,7 @@ Change Log
 
 * Introduce Record type for storing Drama history.
 * When a Drama is generating dialogue, set a class on the blockquote according to the most recent method call.
+* Add `build_presenter` factory method to create a Presenter.
 
 0.12.0
 ======

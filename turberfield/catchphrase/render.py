@@ -25,8 +25,6 @@ from turberfield.dialogue.types import DataObject
 """
 catchphrase-banner
     A region of decorative text and background images. Style multiple `catchphrase-banner`s with CSS `nth-of-type`.
-catchphrase-widget catchphrase-widget-<class>
-    An instance of `catchphrase.widget.Widget`.
 catchphrase-reveal
     A region animated to progressively reveal the contents (may include images, icons, etc)
 catchphrase-colour-shadows

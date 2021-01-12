@@ -23,6 +23,7 @@ import itertools
 import math
 import operator
 
+from turberfield.catchphrase.drama import Drama
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
 from turberfield.dialogue.types import Stateful
@@ -31,6 +32,17 @@ from turberfield.dialogue.types import Stateful
 class Presenter:
 
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
+
+    @staticmethod
+    def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1):
+        for n, p in enumerate(folder.paths):
+            folder_dialogue = Drama.load_dialogue(folder.pkg, p)
+            text = Drama.write_dialogue(folder_dialogue, *args)
+            rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
+            if rv:
+                return (n, rv)
+        else:
+            return (None, None)
 
     @staticmethod
     def build_from_text(text, ensemble=[], strict=True, roles=1, path="inline"):
