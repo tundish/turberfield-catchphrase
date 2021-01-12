@@ -37,6 +37,7 @@ Action = namedtuple(
 class Drama:
 
     Parameter = namedtuple("Parameter", ["name", "required", "regex", "values", "tip"])
+    Record = namedtuple("Record", ["fn", "args", "kwargs", "lines"])
 
     @classmethod
     def param(cls, name, required, regex, values, tip):
@@ -108,8 +109,9 @@ class Drama:
         if fn is None:
             yield "\n{0}\n".format(self.refusal)
         else:
-            self.history.append((fn, args, kwargs))
-            yield from fn(fn, *args, **kwargs)
+            lines = list(fn(fn, *args, **kwargs))
+            self.history.append(self.Record(fn, args, kwargs, lines))
+            yield from lines
 
     def add(self, item):
         for n in getattr(item, "names", []):

@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.13.0
+======
+
+* Introduce Record type for storing Drama history.
+
 0.12.0
 ======
 

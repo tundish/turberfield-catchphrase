@@ -17,6 +17,7 @@ import functools
 import re
 import textwrap
 
+from turberfield.catchphrase.drama import Drama
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.types import DataObject
@@ -57,6 +58,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
 
     @staticmethod
     def animated_line_to_html(anim):
+        # TODO: if persona is a Drama object, add css class for method?
         name = anim.element.persona.name if hasattr(anim.element.persona, "name") else ""
         name = "{0.firstname} {0.surname}".format(name) if hasattr(name, "firstname") else name
         return f"""
@@ -182,16 +184,6 @@ pattern="{validator.pattern}"
         for i in frame[Model.Line]:
             if i.element.text:
                 yield (Renderer.animated_line_to_terminal(i), i.duration)
-
-    @staticmethod
-    def render_frame_to_text(frame, ensemble=[], title="", final=False):
-        return "\n".join(
-            ["{0}{1}{2}".format(
-                " ".join(filter(None, anim.element.persona.name)) if hasattr(anim.element.persona, "name") else "",
-                ": " if hasattr(anim.element.persona, "name") else "",
-                anim.element.text
-            ) for anim in frame[Model.Line]]
-        )
 
     @staticmethod
     def render_dict_to_css(mapping=None, tag=":root"):
