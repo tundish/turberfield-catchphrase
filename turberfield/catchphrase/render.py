@@ -58,12 +58,17 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
 
     @staticmethod
     def animated_line_to_html(anim):
-        # TODO: if persona is a Drama object, add css class for method?
         name = anim.element.persona.name if hasattr(anim.element.persona, "name") else ""
         name = "{0.firstname} {0.surname}".format(name) if hasattr(name, "firstname") else name
+        if getattr(anim.element.persona, "history", []):  # As per Drama
+            tag = '<blockquote class="catchphrase-method-{0}">'.format(
+                anim.element.persona.history[-1].fn.__name__.lower()
+            )
+        else:
+            tag = "<blockquote>"
         return f"""
 <li style="animation-delay: {anim.delay:.2f}s; animation-duration: {anim.duration:.2f}s">
-<blockquote>
+{tag}
 <header>{name}</header>
 {anim.element.html}
 </blockquote>

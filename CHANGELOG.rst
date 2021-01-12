@@ -10,6 +10,7 @@ Change Log
 ======
 
 * Introduce Record type for storing Drama history.
+* When a Drama is generating dialogue, set a class on the blockquote according to the most recent method call.
 
 0.12.0
 ======
