@@ -36,6 +36,24 @@ Action = namedtuple(
 
 class Drama:
 
+    """
+
+    Drama objects are callable objects. They operate via Python's callable and generator protocols.
+
+    They also conform to two conventions:
+
+    * The docstrings of their methods declare syntax for the Catchphrase parser_.
+    * Drama objects dynamically generate dialogue.
+
+    Drama methods must declare by annotation the types of their keyword parameters.
+    They must also provide a docstring to define the format of the text commands which apply to them.
+
+    Subclasses will override these methods:
+
+    * build
+    * interpret
+
+    """
     Parameter = namedtuple("Parameter", ["name", "required", "regex", "values", "tip"])
     Record = namedtuple("Record", ["fn", "args", "kwargs", "lines"])
 
@@ -52,16 +70,25 @@ class Drama:
 
     @staticmethod
     def build():
+        """
+        FIXME: Docs
+        """
         return []
 
     @staticmethod
     @functools.cache
     def load_dialogue(pkg, resource):
+        """
+        FIXME: Docs
+        """
         with importlib.resources.path(pkg, resource) as path:
             return path.read_text(encoding="utf-8")
 
     @staticmethod
     def build_dialogue(*args, shot="", entity=""):
+        """
+        FIXME: Docs
+        """
         shots = iter([shot]) if isinstance(shot, str) else iter(shot)
         entities = itertools.repeat(entity) if isinstance(entity, str) else entity
         for arg in args:
@@ -78,6 +105,9 @@ class Drama:
 
     @staticmethod
     def write_dialogue(text, *args, shot="Drama dialogue", entity=""):
+        """
+        FIXME: Docs
+        """
         # Find how many format parameters there are in the dialogue text
         slots = set(re.findall("\{\d+\}", text))
         if not slots:
@@ -114,18 +144,30 @@ class Drama:
             yield from lines
 
     def add(self, item):
+        """
+        FIXME: Docs
+        """
         for n in getattr(item, "names", []):
             self.lookup[n].add(item)
 
     @property
     def ensemble(self):
+        """
+        FIXME: Docs
+        """
         return list({i for s in self.lookup.values() for i in s}) + [self]
 
     @property
     def turns(self):
+        """
+        FIXME: Docs
+        """
         return len(self.history)
 
     def match(self, text, ensemble=[], cutoff=0.95):
+        """
+        FIXME: Docs
+        """
         options = defaultdict(list)
         for fn in self.active:
             for k, v in CommandParser.expand_commands(fn, ensemble + list(self.ensemble)):
@@ -142,6 +184,9 @@ class Drama:
             yield (None, [text], {})
 
     def interpret(self, options):
+        """
+        FIXME: Docs
+        """
         return next(iter(options), "")
 
     def do_help(self, key, text):

@@ -23,15 +23,24 @@ Framework
 Drama
 =====
 
-Drama objects dynamically generate dialogue.
+Drama objects are responsible for the game logic of your story.
+Any calculations, computations and state transitions get done there.
 
-Subclasses will override these methods:
+I recommend the following techniques for organising your Drama code:
 
-* build
-* interpret
+* Write unit tests for the dramas in your story, to drive out the bugs in your story logic.
+* Partition your code into loosely-coupled modules, allowing you to share and re-use that logic.
+* Use Python multiple inheritance to layer story-specific behaviour on top of mundane mechanics.
 
-Drama methods must declare by annotation the types of their keyword parameters.
-They must also provide a docstring to define the format of the text commands which apply to them.
+Dramas work by implementing a generator method for a group of semantically similar
+free-text commands. Each method declares the syntax of those commands in its docstring.
+
+The responsibility of a Drama method is also to yield strings of dialogue.
+You splice these into the main narrative dialogue of your story.
+
+Drama methods can add or discard themselves or other methods from active duty.
+In this way complex scenarios can be achieved while minimising the potential for unplanned
+behaviour in game logic.
 
 Parser
 ======
