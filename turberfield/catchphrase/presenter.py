@@ -51,7 +51,7 @@ class Presenter:
         if all(selection.values()) or (not strict and any(selection.values())):
             script.cast(selection)
             model = script.run()
-            rv = Presenter(model, ensemble=ensemble)
+            rv = Presenter(model, ensemble=ensemble, text=text)
             for k, v in model.metadata:
                 rv.metadata[k].append(v)
             return rv
@@ -113,7 +113,7 @@ class Presenter:
                 continue
         return rv
 
-    def __init__(self, dialogue, scene=None, ensemble=None):
+    def __init__(self, dialogue, scene=None, ensemble=None, text=""):
         self.frames = [
             defaultdict(list, dict(
                 {k: list(v) for k, v in itertools.groupby(i.items, key=type)},
@@ -124,6 +124,7 @@ class Presenter:
         ]
         self.ensemble = ensemble
         self.metadata = defaultdict(list)
+        self.text = text
 
     @property
     def dwell(self) -> float:
