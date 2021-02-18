@@ -34,10 +34,10 @@ class Presenter:
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
 
     @staticmethod
-    def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1):
+    def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1, **kwargs):
         for n, p in enumerate(folder.paths):
             folder_dialogue = Drama.load_dialogue(folder.pkg, p)
-            text = Drama.write_dialogue(folder_dialogue, *args)
+            text = Drama.write_dialogue(folder_dialogue, *args, **kwargs)
             rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
             if rv:
                 return (n, rv)

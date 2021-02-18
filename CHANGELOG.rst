@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.14.0
+======
+
+* Update pinned dependency on turberfield-dialogue.
+* Pass keyword arguments through build_presenter in order to control drama dialogue.
+
 0.13.0
 ======
 
