@@ -17,6 +17,7 @@
 # along with turberfield.  If not, see <http://www.gnu.org/licenses/>.
 
 from collections import defaultdict
+from collections import deque
 import difflib
 import functools
 import importlib.resources
@@ -128,7 +129,7 @@ class Drama:
         self.prompt = prompt
         self.refusal = refusal
         self.active = set([self.do_help])
-        self.history = []
+        self.history = deque()
         for i in self.build():
             self.add(i)
         self.input_text = ""
@@ -140,7 +141,7 @@ class Drama:
             yield "\n{0}\n".format(self.refusal)
         else:
             lines = list(fn(fn, *args, **kwargs))
-            self.history.append(self.Record(fn, args, kwargs, lines))
+            self.history.appendleft(self.Record(fn, args, kwargs, lines))
             yield from lines
 
     def add(self, item):

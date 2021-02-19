@@ -65,7 +65,7 @@ class Presenter:
             fmt = "".join(("{0.", item.attr, "}"))
             try:
                 lhs = fmt.format(item.object)
-            except (AttributeError, IndexError, KeyError, ValueError):
+            except (AttributeError, IndexError, KeyError, TypeError, ValueError):
                 return False
             else:
                 rhs = str(item.val)

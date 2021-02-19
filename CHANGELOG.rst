@@ -12,6 +12,7 @@ Change Log
 * Update pinned dependency on turberfield-dialogue.
 * Pass keyword arguments through build_presenter in order to control drama dialogue.
 * `build_from_text` method now stores text in the returned Presenter object.
+* Drama stores history in reverse order to allow access from condition directives.
 
 0.13.0
 ======
