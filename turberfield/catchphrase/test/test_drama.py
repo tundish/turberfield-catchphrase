@@ -58,6 +58,7 @@ class DramaMatchTests(unittest.TestCase):
 
     def test_do_help(self):
         drama = Drama()
+        drama.active.add(drama.do_help)
         fn, args, kwargs = next(drama.match("help"))
         self.assertEqual(drama.do_help, fn)
         self.assertEqual(["help"], args)

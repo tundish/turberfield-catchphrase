@@ -124,46 +124,37 @@ class Drama:
             dialogue = Drama.build_dialogue(*args, entity=entity)
             return text.format(*itertools.chain(dialogue, itertools.repeat("", len(slots))))
 
-    def __init__(self, lookup=None, prompt=">", refusal="That is not an option just now.", **kwargs):
-        self.lookup = lookup or defaultdict(set)
-        self.prompt = prompt
-        self.refusal = refusal
-        self.active = set([self.do_help])
+    def __init__(self, **kwargs):
+        self.lookup = defaultdict(set)
+        self.active = set()
         self.history = deque()
-        for i in self.build():
-            self.add(i)
-        self.input_text = ""
 
     def __call__(self, fn, *args, **kwargs):
-        self.input_text = args and args[0] or ""
-
-        if fn is None:
-            yield "\n{0}\n".format(self.refusal)
-        else:
-            lines = list(fn(fn, *args, **kwargs))
-            self.history.appendleft(self.Record(fn, args, kwargs, lines))
-            yield from lines
-
-    def add(self, item):
-        """
-        FIXME: Docs
-        """
-        for n in getattr(item, "names", []):
-            self.lookup[n].add(item)
+        lines = list(fn(fn, *args, **kwargs))
+        self.history.appendleft(self.Record(fn, args, kwargs, lines))
+        yield from lines
 
     @property
     def ensemble(self):
-        """
-        FIXME: Docs
-        """
-        return list({i for s in self.lookup.values() for i in s}) + [self]
+        return list({i for s in self.lookup.values() for i in s})
 
     @property
     def turns(self):
-        """
-        FIXME: Docs
-        """
         return len(self.history)
+
+    def build(self):
+        yield from []
+
+    def add(self, *args):
+        for item in args:
+            for n in getattr(item, "names", []):
+                self.lookup[n].add(item)
+
+    def interlude(self, folder, index, **kwargs) -> dict:
+        return {}
+
+    def interpret(self, options):
+        return next(iter(options), "")
 
     def match(self, text, ensemble=[], cutoff=0.95):
         """
@@ -183,12 +174,6 @@ class Drama:
             yield from ((fn, [text], kwargs) for fn, kwargs in options[matches[0]])
         except (IndexError, KeyError):
             yield (None, [text], {})
-
-    def interpret(self, options):
-        """
-        FIXME: Docs
-        """
-        return next(iter(options), "")
 
     def do_help(self, key, text):
         """
