@@ -18,6 +18,7 @@
 
 from collections import defaultdict
 from collections import deque
+from collections import namedtuple
 import difflib
 import functools
 import importlib.resources
@@ -28,11 +29,6 @@ import textwrap
 
 from turberfield.catchphrase.parser import CommandParser
 
-# From Addison Arches
-from collections import namedtuple
-
-Action = namedtuple(
-    "Action", ["name", "rel", "typ", "ref", "method", "parameters", "prompt"])
 
 
 class Drama:
@@ -55,7 +51,6 @@ class Drama:
     * interpret
 
     """
-    Parameter = namedtuple("Parameter", ["name", "required", "regex", "values", "tip"])
     Record = namedtuple("Record", ["fn", "args", "kwargs", "lines"])
 
     @classmethod

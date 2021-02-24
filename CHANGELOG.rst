@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.15.0
+======
+
+* Resite Action and Parameter for use by a Story.
+* Refactor `render_animated_frame_to_html`.
+
 0.14.0
 ======
 
