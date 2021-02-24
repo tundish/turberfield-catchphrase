@@ -113,7 +113,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
                     {'required="required"' if p.required else ''}
                     {'autofocus="autofocus"' if autofocus else ''}
                     type="{'hidden' if p.required == 'hidden' else 'text'}"
-                    title="{p.tip}"
+                    title="{html.escape(p.tip)}"
                     />""")
             elif len(p.values) == 1:
                 yield textwrap.dedent(f"""

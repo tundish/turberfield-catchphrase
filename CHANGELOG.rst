@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.16.0
+======
+
+* Fix a bug in escaping tooltip in rendered controls.
+
 0.15.0
 ======
 
