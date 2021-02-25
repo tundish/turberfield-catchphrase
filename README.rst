@@ -6,7 +6,7 @@ parser-based interactive fiction for the web.
 
 Catchphrase is a Python library, and part of the `Turberfield` namespace.
 
-For a demonstration of such a project, see the repository `tea-and-sympathy`_.
+For a demonstration of such a project, see the repository `tea_and_sympathy`_.
 You are free to download and experiment with that example.
 
 This framework makes heavy use of the turberfield-dialogue_ library.
@@ -67,4 +67,4 @@ The Renderer is a namespace for functions which generate HTML5 elements from Pre
 There is also support for plain text output.
 
 .. _turberfield-dialogue: https://github.com/tundish/turberfield-dialogue
-.. _tea-and-sympathy: https://github.com/tundish/tea-and-sympathy
+.. _tea_and_sympathy: https://github.com/tundish/tea_and_sympathy

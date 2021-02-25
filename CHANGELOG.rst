@@ -10,6 +10,7 @@ Change Log
 ======
 
 * Fix a bug in escaping tooltip in rendered controls.
+* Update links to TaS after repo name change.
 
 0.15.0
 ======
