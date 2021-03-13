@@ -11,6 +11,7 @@ Change Log
 
 * Fix a bug in escaping tooltip in rendered controls.
 * Update links to TaS after repo name change.
+* `Drama.build` now takes an optional `ensemble` parameter.
 
 0.15.0
 ======

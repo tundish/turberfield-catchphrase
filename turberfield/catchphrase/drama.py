@@ -65,13 +65,6 @@ class Drama:
         return decorator
 
     @staticmethod
-    def build():
-        """
-        FIXME: Docs
-        """
-        return []
-
-    @staticmethod
     @functools.cache
     def load_dialogue(pkg, resource):
         """
@@ -137,8 +130,8 @@ class Drama:
     def turns(self):
         return len(self.history)
 
-    def build(self):
-        yield from []
+    def build(self, ensemble=None):
+        yield from ensemble or []
 
     def add(self, *args):
         for item in args:
@@ -170,6 +163,7 @@ class Drama:
         except (IndexError, KeyError):
             yield (None, [text], {})
 
+    # TODO: Move to a mixin
     def do_help(self, key, text):
         """
         help | ?

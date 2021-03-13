@@ -23,6 +23,7 @@ import unittest
 import turberfield.catchphrase
 from turberfield.catchphrase.presenter import Presenter
 from turberfield.dialogue.model import Model
+from turberfield.dialogue.types import Presence
 from turberfield.dialogue.types import Stateful
 
 
@@ -99,12 +100,20 @@ class PresenterAllowsTests(unittest.TestCase):
         c = Model.Condition(obj, "a.b.c", "test", None)
         self.assertTrue(Presenter.allows(c))
 
-    def test_condition_state(self):
+    def test_condition_state_integer(self):
         obj = Stateful().set_state(4)
         c = Model.Condition(obj, "state", 4, None)
         self.assertTrue(Presenter.allows(c))
 
         c = Model.Condition(obj, "state", "4", None)
+        self.assertFalse(Presenter.allows(c))
+
+    def test_condition_state_enum(self):
+        obj = Stateful().set_state(Presence.throb)
+        c = Model.Condition(obj, "state", Presence.throb, None)
+        self.assertTrue(Presenter.allows(c))
+
+        c = Model.Condition(obj, "state", "Presence.throb", None)
         self.assertFalse(Presenter.allows(c))
 
 
