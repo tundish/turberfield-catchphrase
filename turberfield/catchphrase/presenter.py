@@ -35,23 +35,24 @@ class Presenter:
 
     @staticmethod
     def build_presenter(folder, /, *args, ensemble=[], strict=True, roles=1, **kwargs):
+        rv = None
         for n, p in enumerate(folder.paths):
             folder_dialogue = Drama.load_dialogue(folder.pkg, p)
             text = Drama.write_dialogue(folder_dialogue, *args, **kwargs)
-            rv = Presenter.build_from_text(text, ensemble=ensemble, strict=strict, roles=roles, path=p)
+            rv = Presenter.build_from_text(text, index=n, ensemble=ensemble, strict=strict, roles=roles, path=p)
             if rv:
-                return (n, rv)
-        else:
-            return (None, None)
+                break
+
+        return rv
 
     @staticmethod
-    def build_from_text(text, ensemble=[], strict=True, roles=1, path="inline"):
+    def build_from_text(text, index=None, ensemble=[], strict=True, roles=1, path="inline"):
         script = SceneScript(path, doc=SceneScript.read(text))
         selection = script.select(ensemble, roles=roles)
         if all(selection.values()) or (not strict and any(selection.values())):
             script.cast(selection)
             model = script.run()
-            rv = Presenter(model, ensemble=ensemble, text=text)
+            rv = Presenter(model, index=index, ensemble=ensemble, text=text)
             for k, v in model.metadata:
                 rv.metadata[k].append(v)
             return rv
@@ -113,7 +114,8 @@ class Presenter:
                 continue
         return rv
 
-    def __init__(self, dialogue, scene=None, ensemble=None, text=""):
+    def __init__(self, dialogue, index=None, scene=None, ensemble=None, text=""):
+        self.index = index
         self.frames = [
             defaultdict(list, dict(
                 {k: list(v) for k, v in itertools.groupby(i.items, key=type)},

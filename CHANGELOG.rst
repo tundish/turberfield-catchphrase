@@ -12,6 +12,7 @@ Change Log
 * Fix a bug in escaping tooltip in rendered controls.
 * Update links to TaS after repo name change.
 * `Drama.build` now takes an optional `ensemble` parameter.
+* `build_presenter` returns a single value. The Presenter object has its index set as an attribute.
 
 0.15.0
 ======
