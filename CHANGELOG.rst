@@ -6,6 +6,12 @@
 Change Log
 ::::::::::
 
+0.17.0
+======
+
+* Revised treatment of conditionals in `Presenter.animate`.
+  They are now combined with an implicit *and* condition, where previously it was *or*.
+
 0.16.0
 ======
 
