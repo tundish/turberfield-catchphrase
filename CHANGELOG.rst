@@ -6,6 +6,15 @@
 Change Log
 ::::::::::
 
+0.18.0
+======
+
+TODO
+----
+
+* Relax dependency back to Python 3.8
+* Create Impulse/Impulsive class
+
 0.17.0
 ======
 
