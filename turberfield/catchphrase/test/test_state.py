@@ -23,6 +23,9 @@ import unittest
 import enum
 from collections import Counter
 from collections import defaultdict
+from types import SimpleNamespace
+
+from turberfield.dialogue.types import EnumFactory
 from turberfield.dialogue.types import Stateful
 
 __doc__ = """
@@ -32,7 +35,7 @@ Explore possibilities of state age so design with timed coloured Petri Nets migh
 """
 
 
-class State:
+class State(EnumFactory):
     pass
 
 
@@ -45,6 +48,9 @@ class Impulsive(Stateful):
 
     @property
     def pulse(self):
+        for s in self._states.values():
+            period = s.states[s.name]
+            print(period)
         return {k: (next(iter(c.values()), 0) % self.period) or self.period for k, c in self._states.items()}
 
     def set_state(self, *args):
@@ -64,13 +70,23 @@ class Impulsive(Stateful):
 
 class StateTests(unittest.TestCase):
 
-    class Crossing(State, enum.Enum):
+    class CrossingMachine:
 
-        waiting = enum.auto()
-        pausing = enum.auto()
-        walking = enum.auto()
-        running = enum.auto()
-        arrived = enum.auto()
+        states = {
+            "waiting": 6,
+            "pausing": 1,
+            "walking": 3,
+            "running": 2,
+            "arrived": 6,
+        }
+
+    Crossing = enum.Enum("Crossing", CrossingMachine.states, type=State)
+
+    def test_aging(self):
+        fmt = "{0.age:02X}"
+        for age in range(64):
+            obj = SimpleNamespace(age=age)
+            print(fmt.format(obj))
 
     def test_compatibility(self):
         obj = Impulsive()
