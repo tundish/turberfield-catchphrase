@@ -23,6 +23,7 @@ import unittest
 import enum
 from collections import Counter
 from collections import defaultdict
+import re
 from types import SimpleNamespace
 
 from turberfield.dialogue.types import EnumFactory
@@ -84,9 +85,16 @@ class StateTests(unittest.TestCase):
 
     def test_aging(self):
         fmt = "{0.age:02X}"
+        pattern = "[0-9A-F]{{1}}(?P<even>[02468ACE])|(?P<odd>[13579BDF])"
+        regex = re.compile(pattern.format())
         for age in range(64):
             obj = SimpleNamespace(age=age)
-            print(fmt.format(obj))
+            text = fmt.format(obj)
+            m = regex.match(text)
+            if not m:
+                print("Nope: ", text, regex.pattern)
+            else:
+                print(m and m.lastgroup)
 
     def test_compatibility(self):
         obj = Impulsive()
