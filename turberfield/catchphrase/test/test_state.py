@@ -42,17 +42,13 @@ class State(EnumFactory):
 
 class Impulsive(Stateful):
 
-    def __init__(self, period=6, **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._states = defaultdict(Counter)
-        self.period = period
 
     @property
-    def pulse(self):
-        for s in self._states.values():
-            period = s.states[s.name]
-            print(period)
-        return {k: (next(iter(c.values()), 0) % self.period) or self.period for k, c in self._states.items()}
+    def aging(self):
+        return {k: next(iter(c.values()), 0) for k, c in self._states.items()}
 
     def set_state(self, *args):
         for new_state in args:
@@ -71,30 +67,27 @@ class Impulsive(Stateful):
 
 class StateTests(unittest.TestCase):
 
-    class CrossingMachine:
+    class Crossing(enum.Enum):
 
-        states = {
-            "waiting": 6,
-            "pausing": 1,
-            "walking": 3,
-            "running": 2,
-            "arrived": 6,
-        }
+        waiting = enum.auto()
+        pausing = enum.auto()
+        walking = enum.auto()
+        running = enum.auto()
+        arrived = enum.auto()
 
-    Crossing = enum.Enum("Crossing", CrossingMachine.states, type=State)
-
-    def test_aging(self):
-        fmt = "{0.age:02X}"
-        pattern = "[0-9A-F]{{1}}(?P<even>[02468ACE])|(?P<odd>[13579BDF])"
+    def test_regex(self):
+        fmt = "{0.aging[Crossing]:02}"
+        pattern = "(?P<even>\d+[02468])|(?P<odd>\d+[13579])"
         regex = re.compile(pattern.format())
-        for age in range(64):
-            obj = SimpleNamespace(age=age)
+        obj = Impulsive()
+        obj.state = self.Crossing.waiting
+        for n in range(64):
+            obj.state = self.Crossing.waiting
             text = fmt.format(obj)
-            m = regex.match(text)
-            if not m:
-                print("Nope: ", text, regex.pattern)
-            else:
-                print(m and m.lastgroup)
+            with self.subTest(obj=obj, text=text):
+                m = regex.match(text)
+                self.assertTrue(m)
+                self.assertEqual("odd" if n % 2 else "even", m.lastgroup)
 
     def test_compatibility(self):
         obj = Impulsive()
@@ -108,33 +101,26 @@ class StateTests(unittest.TestCase):
         obj.state = self.Crossing.arrived
         self.assertEqual(self.Crossing.arrived, obj.get_state(self.Crossing))
 
-    def test_pulse(self):
-        obj = Impulsive(period=4)
+    def test_aging(self):
+        obj = Impulsive()
         obj.state = self.Crossing.waiting
         self.assertEqual(self.Crossing.waiting, obj.get_state(self.Crossing))
-        self.assertEqual(1, obj.pulse["Crossing"])
 
         obj.state = self.Crossing.walking
         self.assertEqual(self.Crossing.walking, obj.get_state(self.Crossing))
-        self.assertEqual(1, obj.pulse["Crossing"])
 
         obj.state = self.Crossing.walking
         self.assertEqual(self.Crossing.walking, obj.get_state(self.Crossing))
-        self.assertEqual(2, obj.pulse["Crossing"])
 
         obj.state = self.Crossing.walking
         self.assertEqual(self.Crossing.walking, obj.get_state(self.Crossing))
-        self.assertEqual(3, obj.pulse["Crossing"])
 
         obj.state = self.Crossing.walking
         self.assertEqual(self.Crossing.walking, obj.get_state(self.Crossing))
-        self.assertEqual(4, obj.pulse["Crossing"])
 
         obj.state = self.Crossing.walking
         self.assertEqual(self.Crossing.walking, obj.get_state(self.Crossing))
-        self.assertEqual(1, obj.pulse["Crossing"])
 
         obj.state = self.Crossing.arrived
         self.assertEqual(self.Crossing.arrived, obj.get_state(self.Crossing))
-        self.assertEqual(1, obj.pulse["Crossing"])
 
