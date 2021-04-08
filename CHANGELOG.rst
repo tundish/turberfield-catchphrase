@@ -12,8 +12,13 @@ Change Log
 TODO
 ----
 
-* Relax dependency back to Python 3.8
 * Create Impulse/Impulsive class
+
+0.18.0
+======
+
+* Relax dependency back to Python 3.8
+* Fix for changes in Condition from turberfield-dialogue 0.31.0
 
 0.17.0
 ======

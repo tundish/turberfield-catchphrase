@@ -26,6 +26,7 @@ import operator
 from turberfield.catchphrase.drama import Drama
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
+from turberfield.dialogue.performer import Performer
 from turberfield.dialogue.types import Stateful
 
 
@@ -59,20 +60,7 @@ class Presenter:
 
     @staticmethod
     def allows(item: Model.Condition):
-        if item.attr == "state" and isinstance(item.object, Stateful):
-            lhs = item.object.get_state(type(item.val))
-            rhs = item.val
-        else:
-            fmt = "".join(("{0.", item.attr, "}"))
-            try:
-                lhs = fmt.format(item.object)
-            except (AttributeError, IndexError, KeyError, TypeError, ValueError):
-                return False
-            else:
-                rhs = str(item.val)
-
-        op = item.operator or operator.eq
-        return op(lhs, rhs)
+        return Performer.allows(item)
 
     @staticmethod
     def animate_audio(seq):

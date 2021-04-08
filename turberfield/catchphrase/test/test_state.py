@@ -47,7 +47,7 @@ class Impulsive(Stateful):
         self._states = defaultdict(Counter)
 
     @property
-    def aging(self):
+    def tally(self):
         return {k: next(iter(c.values()), 0) for k, c in self._states.items()}
 
     def set_state(self, *args):
@@ -76,7 +76,7 @@ class StateTests(unittest.TestCase):
         arrived = enum.auto()
 
     def test_regex(self):
-        fmt = "{0.aging[Crossing]:02}"
+        fmt = "{0.tally[Crossing]:02}"
         pattern = "(?P<even>\d+[02468])|(?P<odd>\d+[13579])"
         regex = re.compile(pattern.format())
         obj = Impulsive()

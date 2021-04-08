@@ -65,7 +65,7 @@ class Drama:
         return decorator
 
     @staticmethod
-    @functools.cache
+    @functools.lru_cache()
     def load_dialogue(pkg, resource):
         """
         FIXME: Docs

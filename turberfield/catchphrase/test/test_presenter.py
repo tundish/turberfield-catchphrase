@@ -31,7 +31,7 @@ class PresenterAllowsTests(unittest.TestCase):
 
     def test_condition_bad(self):
         obj = types.SimpleNamespace(name="test")
-        c = Model.Condition(obj, "g:n[0]m*e", "test", None)
+        c = Model.Condition(obj, "g:n[0]m*e", None, "test")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_complex(self):
@@ -45,50 +45,50 @@ class PresenterAllowsTests(unittest.TestCase):
                 )
             }
         )
-        c = Model.Condition(obj, "a[b].c[1].e", "bar", None)
+        c = Model.Condition(obj, "a[b].c[1].e", None, "bar")
         self.assertTrue(Presenter.allows(c))
 
     def test_condition_dict(self):
         obj = types.SimpleNamespace(
             a={"b": types.SimpleNamespace(c="test")}
         )
-        c = Model.Condition(obj, "a[b].c", "test", None)
+        c = Model.Condition(obj, "a[b].c", None, "test")
         self.assertTrue(Presenter.allows(c))
 
-        c = Model.Condition(obj, "a[f].c", "test", None)
+        c = Model.Condition(obj, "a[f].c", None, "test")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_float(self):
         obj = types.SimpleNamespace(value=1.234)
-        c = Model.Condition(obj, "value:04.1f", "01.2", None)
+        c = Model.Condition(obj, "value:04.1f", None, "01.2")
         self.assertTrue(Presenter.allows(c))
 
     def test_condition_list(self):
         obj = types.SimpleNamespace(
             a=["foo", "bar"]
         )
-        c = Model.Condition(obj, "a[0]", "foo", None)
+        c = Model.Condition(obj, "a[0]", None, "foo")
         self.assertTrue(Presenter.allows(c))
 
-        c = Model.Condition(obj, "a[2]", "foo", None)
+        c = Model.Condition(obj, "a[2]", None, "foo")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_missing(self):
         obj = types.SimpleNamespace(name="test")
-        c = Model.Condition(obj, "gnome", "test", None)
+        c = Model.Condition(obj, "gnome", None, "test")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_mistyped(self):
         obj = types.SimpleNamespace(name="test")
-        c = Model.Condition(obj, "name:02d", "test", None)
+        c = Model.Condition(obj, "name:02d", None, "test")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_simple(self):
         obj = types.SimpleNamespace(name="test")
-        c = Model.Condition(obj, "name", "test", None)
+        c = Model.Condition(obj, "name", None, "test")
         self.assertTrue(Presenter.allows(c))
 
-        c = Model.Condition(obj, "name", "toast", None)
+        c = Model.Condition(obj, "name", None, "toast")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_nested(self):
@@ -97,23 +97,23 @@ class PresenterAllowsTests(unittest.TestCase):
                 b=types.SimpleNamespace(c="test")
             )
         )
-        c = Model.Condition(obj, "a.b.c", "test", None)
+        c = Model.Condition(obj, "a.b.c", None, "test")
         self.assertTrue(Presenter.allows(c))
 
     def test_condition_state_integer(self):
         obj = Stateful().set_state(4)
-        c = Model.Condition(obj, "state", 4, None)
+        c = Model.Condition(obj, "state", None, 4)
         self.assertTrue(Presenter.allows(c))
 
-        c = Model.Condition(obj, "state", "4", None)
+        c = Model.Condition(obj, "state", None, "4")
         self.assertFalse(Presenter.allows(c))
 
     def test_condition_state_enum(self):
         obj = Stateful().set_state(Presence.throb)
-        c = Model.Condition(obj, "state", Presence.throb, None)
+        c = Model.Condition(obj, "state", None, Presence.throb)
         self.assertTrue(Presenter.allows(c))
 
-        c = Model.Condition(obj, "state", "Presence.throb", None)
+        c = Model.Condition(obj, "state", None, "Presence.throb")
         self.assertFalse(Presenter.allows(c))
 
 
