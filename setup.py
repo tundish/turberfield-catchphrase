@@ -46,7 +46,7 @@ setup(
         "turberfield.catchphrase.css": ["*.css"],
     },
     install_requires=[
-        "turberfield-dialogue>=0.31.0",
+        "turberfield-dialogue>=0.32.0",
     ],
     extras_require={},
     tests_require=[],

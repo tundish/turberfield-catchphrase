@@ -6,13 +6,18 @@
 Change Log
 ::::::::::
 
-0.18.0
+0.20.0
 ======
 
 TODO
 ----
 
 * Create Impulse/Impulsive class
+
+0.19.0
+======
+
+* Align with turberfield-dialogue 0.32.0
 
 0.18.0
 ======
