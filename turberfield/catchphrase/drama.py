@@ -51,7 +51,7 @@ class Drama:
     * interpret
 
     """
-    Record = namedtuple("Record", ["fn", "args", "kwargs", "lines"])
+    Record = namedtuple("Record", ["fn", "args", "kwargs", "result"])
 
     @classmethod
     def param(cls, name, required, regex, values, tip):
@@ -118,9 +118,9 @@ class Drama:
         self.history = deque()
 
     def __call__(self, fn, *args, **kwargs):
-        lines = list(fn(fn, *args, **kwargs))
-        self.history.appendleft(self.Record(fn, args, kwargs, lines))
-        yield from lines
+        rv = fn(fn, *args, **kwargs)
+        self.history.appendleft(self.Record(fn, args, kwargs, rv))
+        return rv
 
     @property
     def ensemble(self):

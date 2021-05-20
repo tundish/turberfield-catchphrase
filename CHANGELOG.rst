@@ -12,7 +12,13 @@ Change Log
 TODO
 ----
 
+* Interludes to be asynchronous; how to synchronise?
 * Create Impulse/Impulsive class
+* Yield *self* from Drama methods
+* Yield *this* from Drama methods
+* Yield format keyword parameter from Drama method.
+* Make STORY.bookmark.drama.history[0].args[0] hint better to find last invoked drama method.
+* Remove Drama.write_dialogue
 
 0.19.0
 ======
