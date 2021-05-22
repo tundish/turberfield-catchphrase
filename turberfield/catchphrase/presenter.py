@@ -35,19 +35,19 @@ class Presenter:
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
 
     @staticmethod
-    def build_presenter(folder, results, ensemble=[], strict=True, roles=1, **kwargs):
+    def build_presenter(folder, data, ensemble=[], strict=True, roles=1, **kwargs):
         rv = None
         for n, p in enumerate(folder.paths):
             text = Drama.load_dialogue(folder.pkg, p)
-            if isinstance(results, str):
-                text = text.format(results)
+            if isinstance(data, str):
+                text = text.format(data)
             else:
                 try:
-                    results.update(**kwargs)
+                    data.update(**kwargs)
                 except AttributeError:
-                    text = text.format(*results)
+                    text = text.format(*data)
                 else:
-                    text = text.format(**results)
+                    text = text.format(**data)
             rv = Presenter.build_from_text(text, index=n, ensemble=ensemble, strict=strict, roles=roles, path=p)
             if rv:
                 break
