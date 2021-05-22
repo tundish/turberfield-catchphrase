@@ -173,11 +173,4 @@ class Drama:
             lambda x: len(x) > 1,
             (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
         ))
-        hints = "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options))))
-        yield textwrap.dedent("""
-
-        Here are some commands to try:
-
-        {hints}
-
-        """).format(text=text, hints=hints)
+        return "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options))))

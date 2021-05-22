@@ -39,7 +39,9 @@ class Presenter:
         rv = None
         for n, p in enumerate(folder.paths):
             text = Drama.load_dialogue(folder.pkg, p)
-            if results:
+            if isinstance(results, str):
+                text = text.format(results)
+            else:
                 try:
                     results.update(**kwargs)
                 except AttributeError:
