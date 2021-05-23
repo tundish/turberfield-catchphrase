@@ -20,8 +20,6 @@ from collections import defaultdict
 from collections import deque
 from collections import namedtuple
 import difflib
-import functools
-import importlib.resources
 import itertools
 import random
 import re
@@ -65,66 +63,23 @@ class Mediator:
             return method
         return decorator
 
-    @staticmethod
-    @functools.lru_cache()
-    def load_dialogue(pkg, resource):
-        """
-        FIXME: Docs
-        """
-        with importlib.resources.path(pkg, resource) as path:
-            return path.read_text(encoding="utf-8")
-
-    @staticmethod
-    def build_dialogue(*args, shot="", entity=""):
-        """
-        FIXME: Docs
-        """
-        shots = iter([shot]) if isinstance(shot, str) else iter(shot)
-        entities = itertools.repeat(entity) if isinstance(entity, str) else entity
-        for arg in args:
-            shot = next(shots, "")
-            under = "-" * len(shot)
-            lines = [arg] if isinstance(arg, str) else arg
-            if shot:
-                yield f"\n\n{shot}\n{under}\n"
-            for entity, line in zip(entities, lines):
-                if entity:
-                    yield f"\n[{entity}]_\n\n    {line}\n"
-                else:
-                    yield line + "\n"
-
-    @staticmethod
-    def write_dialogue(text, *args, shot="Mediator dialogue", entity=""):
-        """
-        FIXME: Docs
-        """
-        # Find how many format parameters there are in the dialogue text
-        slots = set(re.findall("\{\d+\}", text))
-        if not slots:
-            # Append mediator dialogue to end of text
-            dialogue = Mediator.build_dialogue(*args, entity=entity)
-            return "{0}\n{1}".format(text, "".join(tuple(dialogue)))
-        elif len(slots) == 1:
-            # Bind dialogue as a single shot to the format parameter
-            dialogue = "\n".join(Mediator.build_dialogue(*args, shot=shot, entity=entity))
-            return text.format(dialogue)
-        else:
-            # Bind each line of dialogue to its own format parameter
-            dialogue = Mediator.build_dialogue(*args, entity=entity)
-            return text.format(*itertools.chain(dialogue, itertools.repeat("", len(slots))))
-
-    def __init__(self, *args, **kwargs):
-        self.lookup = defaultdict(set)
+    def __init__(self, *args, serializer=None, **kwargs):
         self.active = set(filter(None, (getattr(self, i, None) for i in args)))
-        self.history = deque()
+        self.serializer = serializer or "\n".join
         self.facts = defaultdict(str)
+        self.history = deque()
+        self.lookup = defaultdict(set)
 
     def __call__(self, fn, *args, **kwargs):
         rv = fn(fn, *args, **kwargs)
         if isinstance(fn, types.GeneratorType):
-            rv = "\n".join(rv)
+            rv = list(rv)
+        if isinstance(rv, (list, tuple)):
+            rv = self.serializer(rv)
+
         self.facts[fn.__name__] = rv
         self.history.appendleft(self.Record(fn.__name__, args, kwargs, rv))
+        return rv
 
     @property
     def ensemble(self):
@@ -146,7 +101,7 @@ class Mediator:
         return {}
 
     def interpret(self, options):
-        return next(iter(options), "")
+        return next(iter(options), (None,) * 3)
 
     def match(self, text, ensemble=[], cutoff=0.95):
         """

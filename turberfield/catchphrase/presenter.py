@@ -19,6 +19,8 @@
 from collections import defaultdict
 from collections import deque
 from collections import namedtuple
+import functools
+import importlib.resources
 import itertools
 import math
 import operator
@@ -35,10 +37,19 @@ class Presenter:
     Animation = namedtuple("Animation", ["delay", "duration", "element"])
 
     @staticmethod
+    @functools.lru_cache()
+    def load_dialogue(pkg, resource):
+        """
+        FIXME: Docs
+        """
+        with importlib.resources.path(pkg, resource) as path:
+            return path.read_text(encoding="utf-8")
+
+    @staticmethod
     def build_presenter(folder, data, ensemble=[], strict=True, roles=1, **kwargs):
         rv = None
         for n, p in enumerate(folder.paths):
-            text = Mediator.load_dialogue(folder.pkg, p)
+            text = Presenter.load_dialogue(folder.pkg, p)
             if isinstance(data, str):
                 text = text.format(data)
             else:
