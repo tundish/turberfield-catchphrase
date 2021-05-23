@@ -29,23 +29,23 @@ class Trivial(Mediator):
         This?
 
         """
-        return "Yes, this"
+        return "Yes, this."
 
     def do_that(self, this, text):
         """
         That?
 
         """
-        return ["Yes", "that"]
+        return ["Yes.", "That."]
 
     def do_tother(self, this, text):
         """
         Or?
 
         """
-        yield "Or"
-        yield "maybe"
-        yield "tother"
+        yield "Or,"
+        yield "Maybe;"
+        yield "Tother."
 
 
 class MediatorMatchTests(unittest.TestCase):
@@ -72,17 +72,30 @@ class MediatorFactsTests(unittest.TestCase):
     def setUp(self):
         self.mediator = Trivial("do_this", "do_that", "do_tother")
 
-    def test_do_this(self):
-        fn, args, kwargs = next(self.mediator.match("this?"))
-        self.assertEqual(self.mediator.do_this, fn)
-        self.assertEqual(["this?"], args)
+    def test_do_that(self):
+        fn, args, kwargs = next(self.mediator.match("that?"))
+        self.assertEqual(self.mediator.do_that, fn)
+        self.assertEqual(["that?"], args)
         self.assertFalse(kwargs)
 
         fn, args, kwargs = self.mediator.interpret([(fn, args, kwargs)])
-        self.assertEqual(self.mediator.do_this, fn)
-        self.assertEqual(["this?"], args)
+        self.assertEqual(self.mediator.do_that, fn)
+        self.assertEqual(["that?"], args)
 
         data = self.mediator(fn, *args, **kwargs)
-        self.assertEqual("Yes, this", data)
-        self.assertEqual("Yes, this", self.mediator.facts[fn.__name__])
+        self.assertEqual("Yes.\nThat.", data)
+        self.assertEqual("Yes.\nThat.", self.mediator.facts[fn.__name__])
+
+    def test_do_this(self):
+        fn, args, kwargs = self.mediator.interpret(self.mediator.match("That?"))
+        data = self.mediator(fn, *args, **kwargs)
+
+        fn, args, kwargs = self.mediator.interpret(self.mediator.match("This?"))
+        data = self.mediator(fn, *args, **kwargs)
+
+        self.assertEqual("Yes, this.", data)
+        self.assertEqual(
+            {"do_this": "Yes, this.", "do_that": "Yes.\nThat."},
+            self.mediator.facts
+        )
 
