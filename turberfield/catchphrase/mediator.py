@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with turberfield.  If not, see <http://www.gnu.org/licenses/>.
 
+import collections.abc
 from collections import defaultdict
 from collections import deque
 from collections import namedtuple
@@ -50,7 +51,7 @@ class Mediator:
     * interpret
 
     """
-    Record = namedtuple("Record", ["fn", "args", "kwargs", "result"])
+    Record = namedtuple("Record", ["name", "args", "kwargs", "result"])
 
     @classmethod
     def param(cls, name, required, regex, values, tip):
@@ -72,7 +73,7 @@ class Mediator:
 
     def __call__(self, fn, *args, **kwargs):
         rv = fn(fn, *args, **kwargs)
-        if isinstance(fn, types.GeneratorType):
+        if not isinstance(rv, collections.abc.Sized) and isinstance(rv, collections.abc.Iterable):
             rv = list(rv)
         if isinstance(rv, (list, tuple)):
             rv = self.serializer(rv)
@@ -80,25 +81,6 @@ class Mediator:
         self.facts[fn.__name__] = rv
         self.history.appendleft(self.Record(fn.__name__, args, kwargs, rv))
         return rv
-
-    @property
-    def ensemble(self):
-        return list({i for s in self.lookup.values() for i in s})
-
-    @property
-    def turns(self):
-        return len(self.history)
-
-    def build(self, ensemble=None):
-        yield from ensemble or []
-
-    def add(self, *args):
-        for item in args:
-            for n in getattr(item, "names", []):
-                self.lookup[n].add(item)
-
-    def interlude(self, folder, index, **kwargs) -> dict:
-        return {}
 
     def interpret(self, options):
         return next(iter(options), (None,) * 3)
@@ -109,7 +91,7 @@ class Mediator:
         """
         options = defaultdict(list)
         for fn in self.active:
-            for k, v in CommandParser.expand_commands(fn, ensemble + list(self.ensemble)):
+            for k, v in CommandParser.expand_commands(fn, ensemble):
                 options[k].append(v)
 
         tokens = CommandParser.parse_tokens(text, discard=CommandParser.discard)

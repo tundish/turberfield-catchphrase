@@ -99,3 +99,19 @@ class MediatorFactsTests(unittest.TestCase):
             self.mediator.facts
         )
 
+    def test_do_tother(self):
+        fn, args, kwargs = self.mediator.interpret(self.mediator.match("That?"))
+        data = self.mediator(fn, *args, **kwargs)
+
+        fn, args, kwargs = self.mediator.interpret(self.mediator.match("This?"))
+        data = self.mediator(fn, *args, **kwargs)
+
+        fn, args, kwargs = self.mediator.interpret(self.mediator.match("Or?"))
+        data = self.mediator(fn, *args, **kwargs)
+
+        self.assertEqual("Or,\nMaybe;\nTother.", data)
+        self.assertEqual(
+            {"do_this": "Yes, this.", "do_that": "Yes.\nThat.", "do_tother": "Or,\nMaybe;\nTother."},
+            self.mediator.facts
+        )
+
