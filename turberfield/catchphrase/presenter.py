@@ -23,7 +23,7 @@ import itertools
 import math
 import operator
 
-from turberfield.catchphrase.drama import Drama
+from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.model import Model
 from turberfield.dialogue.model import SceneScript
 from turberfield.dialogue.performer import Performer
@@ -38,7 +38,7 @@ class Presenter:
     def build_presenter(folder, data, ensemble=[], strict=True, roles=1, **kwargs):
         rv = None
         for n, p in enumerate(folder.paths):
-            text = Drama.load_dialogue(folder.pkg, p)
+            text = Mediator.load_dialogue(folder.pkg, p)
             if isinstance(data, str):
                 text = text.format(data)
             else:

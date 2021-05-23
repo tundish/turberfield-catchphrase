@@ -19,22 +19,22 @@
 import textwrap
 import unittest
 
-from turberfield.catchphrase.drama import Drama
+from turberfield.catchphrase.mediator import Mediator
 
 
-class DramaBuildDialogueTests(unittest.TestCase):
+class MediatorBuildDialogueTests(unittest.TestCase):
 
     def test_simple(self):
-        line = "Single line drama."
-        rv = "\n".join(Drama.build_dialogue(line))
+        line = "Single line mediator."
+        rv = "\n".join(Mediator.build_dialogue(line))
         self.assertIn(line, rv, rv)
         self.assertNotIn("-", rv)
         self.assertNotIn("]_", rv, rv)
         self.assertTrue(rv.endswith("\n"))
 
     def test_entity(self):
-        line = "Single line drama."
-        rv = "\n".join(Drama.build_dialogue(line, shot="Epilogue", entity="NARRATOR"))
+        line = "Single line mediator."
+        rv = "\n".join(Mediator.build_dialogue(line, shot="Epilogue", entity="NARRATOR"))
         self.assertIn(line, rv)
         self.assertIn("Epilogue\n--------", rv)
         self.assertIn("[NARRATOR]_", rv)
@@ -42,38 +42,38 @@ class DramaBuildDialogueTests(unittest.TestCase):
 
     def test_multiline_shot(self):
         lines = ["Say hello.", "Wave goodbye"]
-        rv = "\n".join(Drama.build_dialogue(*lines, shot="Epilogue", entity="NARRATOR"))
+        rv = "\n".join(Mediator.build_dialogue(*lines, shot="Epilogue", entity="NARRATOR"))
         self.assertEqual(1, rv.count("Epilogue\n-----"))
         self.assertEqual(2, rv.count("[NARRATOR]_"))
 
     def test_multishot_lines(self):
         lines = ["Say hello.", "Wave goodbye"]
-        rv = "\n".join(Drama.build_dialogue(*lines, shot=["one", "two"], entity="NARRATOR"))
+        rv = "\n".join(Mediator.build_dialogue(*lines, shot=["one", "two"], entity="NARRATOR"))
         self.assertEqual(1, rv.count("one\n---"), rv)
         self.assertEqual(1, rv.count("two\n---"), rv)
         self.assertEqual(2, rv.count("[NARRATOR]_"))
 
 
-class DramaMatchTests(unittest.TestCase):
+class MediatorMatchTests(unittest.TestCase):
 
     def test_do_help(self):
-        drama = Drama()
-        drama.active.add(drama.do_help)
-        fn, args, kwargs = next(drama.match("help"))
-        self.assertEqual(drama.do_help, fn)
+        mediator = Mediator()
+        mediator.active.add(mediator.do_help)
+        fn, args, kwargs = next(mediator.match("help"))
+        self.assertEqual(mediator.do_help, fn)
         self.assertEqual(["help"], args)
         self.assertFalse(kwargs)
 
     def test_mismatch(self):
-        drama = Drama()
+        mediator = Mediator()
         cmd = "release the frog"
-        fn, args, kwargs = next(drama.match(cmd))
+        fn, args, kwargs = next(mediator.match(cmd))
         self.assertIs(None, fn)
         self.assertEqual([cmd], args)
         self.assertFalse(kwargs)
 
 
-class DramaWriteDialogueTests(unittest.TestCase):
+class MediatorWriteDialogueTests(unittest.TestCase):
 
     def test_append_simple(self):
         text = textwrap.dedent("""
@@ -86,11 +86,11 @@ class DramaWriteDialogueTests(unittest.TestCase):
         I have a line.
         """)
         line = "And another line"
-        rv = Drama.write_dialogue(text, line)
+        rv = Mediator.write_dialogue(text, line)
         self.assertEqual(len(text) + len(line) + 2, len(rv), rv)
 
     def test_simple_format(self):
-        shot = "Drama dialogue"
+        shot = "Mediator dialogue"
         text = textwrap.dedent("""
         Dialogue
         ========
@@ -107,7 +107,7 @@ class DramaWriteDialogueTests(unittest.TestCase):
         There, I've finished.
         """)
         line = "And another line"
-        rv = Drama.write_dialogue(text, line)
+        rv = Mediator.write_dialogue(text, line)
         self.assertEqual(len(text) + len(line) + 6 + 2 * len(shot) - 3, len(rv), rv)
 
     def test_format_error(self):
@@ -128,7 +128,7 @@ class DramaWriteDialogueTests(unittest.TestCase):
         There, I've finished.
         """)
         line = "And another line"
-        rv = Drama.write_dialogue(text, line)
+        rv = Mediator.write_dialogue(text, line)
         self.assertEqual(len(text) + len(line) - 6 + 1, len(rv), rv)
 
     def test_format_multi(self):
@@ -155,5 +155,5 @@ class DramaWriteDialogueTests(unittest.TestCase):
         There, I've finished.
         """)
         lines = ["Every now and again.", "And another line.", "And this one.", ]
-        rv = Drama.write_dialogue(text, *lines)
+        rv = Mediator.write_dialogue(text, *lines)
         self.assertEqual(len(text) + len([i for l in lines for i in l]) + 12, len(rv), rv)

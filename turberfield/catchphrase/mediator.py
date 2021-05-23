@@ -26,23 +26,24 @@ import itertools
 import random
 import re
 import textwrap
+import types
 
 from turberfield.catchphrase.parser import CommandParser
 
 
 
-class Drama:
+class Mediator:
 
     """
 
-    Drama objects are callable objects. They operate via Python's callable and generator protocols.
+    Mediator objects are callable objects. They operate via Python's callable and generator protocols.
 
     They also conform to two conventions:
 
     * The docstrings of their methods declare syntax for the Catchphrase parser_.
-    * Drama objects dynamically generate dialogue.
+    * Mediator objects dynamically generate dialogue.
 
-    Drama methods must declare by annotation the types of their keyword parameters.
+    Mediator methods must declare by annotation the types of their keyword parameters.
     They must also provide a docstring to define the format of the text commands which apply to them.
 
     Subclasses will override these methods:
@@ -93,34 +94,37 @@ class Drama:
                     yield line + "\n"
 
     @staticmethod
-    def write_dialogue(text, *args, shot="Drama dialogue", entity=""):
+    def write_dialogue(text, *args, shot="Mediator dialogue", entity=""):
         """
         FIXME: Docs
         """
         # Find how many format parameters there are in the dialogue text
         slots = set(re.findall("\{\d+\}", text))
         if not slots:
-            # Append drama dialogue to end of text
-            dialogue = Drama.build_dialogue(*args, entity=entity)
+            # Append mediator dialogue to end of text
+            dialogue = Mediator.build_dialogue(*args, entity=entity)
             return "{0}\n{1}".format(text, "".join(tuple(dialogue)))
         elif len(slots) == 1:
             # Bind dialogue as a single shot to the format parameter
-            dialogue = "\n".join(Drama.build_dialogue(*args, shot=shot, entity=entity))
+            dialogue = "\n".join(Mediator.build_dialogue(*args, shot=shot, entity=entity))
             return text.format(dialogue)
         else:
             # Bind each line of dialogue to its own format parameter
-            dialogue = Drama.build_dialogue(*args, entity=entity)
+            dialogue = Mediator.build_dialogue(*args, entity=entity)
             return text.format(*itertools.chain(dialogue, itertools.repeat("", len(slots))))
 
     def __init__(self, **kwargs):
         self.lookup = defaultdict(set)
         self.active = set()
         self.history = deque()
+        self.verdict = defaultdict(str)
 
     def __call__(self, fn, *args, **kwargs):
         rv = fn(fn, *args, **kwargs)
+        if isinstance(fn, types.GeneratorType):
+            rv = "\n".join(rv)
+        self.verdict[fn.__name__] = rv
         self.history.appendleft(self.Record(fn, args, kwargs, rv))
-        return rv
 
     @property
     def ensemble(self):
