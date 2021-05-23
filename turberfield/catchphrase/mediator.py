@@ -113,18 +113,18 @@ class Mediator:
             dialogue = Mediator.build_dialogue(*args, entity=entity)
             return text.format(*itertools.chain(dialogue, itertools.repeat("", len(slots))))
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         self.lookup = defaultdict(set)
-        self.active = set()
+        self.active = set(filter(None, (getattr(self, i, None) for i in args)))
         self.history = deque()
-        self.verdict = defaultdict(str)
+        self.facts = defaultdict(str)
 
     def __call__(self, fn, *args, **kwargs):
         rv = fn(fn, *args, **kwargs)
         if isinstance(fn, types.GeneratorType):
             rv = "\n".join(rv)
-        self.verdict[fn.__name__] = rv
-        self.history.appendleft(self.Record(fn, args, kwargs, rv))
+        self.facts[fn.__name__] = rv
+        self.history.appendleft(self.Record(fn.__name__, args, kwargs, rv))
 
     @property
     def ensemble(self):

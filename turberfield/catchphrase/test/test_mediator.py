@@ -22,6 +22,31 @@ import unittest
 from turberfield.catchphrase.mediator import Mediator
 
 
+class Trivial(Mediator):
+
+    def do_this(self, this, text):
+        """
+        This?
+
+        """
+        return "Yes, this"
+
+    def do_that(self, this, text):
+        """
+        That?
+
+        """
+        return ["Yes", "that"]
+
+    def do_tother(self, this, text):
+        """
+        Or?
+
+        """
+        yield "Or"
+        yield "maybe"
+        yield "tother"
+
 class MediatorBuildDialogueTests(unittest.TestCase):
 
     def test_simple(self):
@@ -71,6 +96,26 @@ class MediatorMatchTests(unittest.TestCase):
         self.assertIs(None, fn)
         self.assertEqual([cmd], args)
         self.assertFalse(kwargs)
+
+
+class MediatorFactsTests(unittest.TestCase):
+
+    def setUp(self):
+        self.mediator = Trivial("do_this", "do_that", "do_tother")
+
+    def test_do_this(self):
+        fn, args, kwargs = next(self.mediator.match("this?"))
+        self.assertEqual(self.mediator.do_this, fn)
+        self.assertEqual(["this?"], args)
+        self.assertFalse(kwargs)
+
+        fn, args, kwargs = self.mediator.interpret([(fn, args, kwargs)])
+        self.assertEqual(self.mediator.do_this, fn)
+        self.assertEqual(["this?"], args)
+
+        data = self.mediator(fn, *args, **kwargs)
+        self.assertEqual("Yes, this", data)
+        self.assertEqual("Yes, this", self.mediator.facts[fn.__name__])
 
 
 class MediatorWriteDialogueTests(unittest.TestCase):
