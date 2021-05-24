@@ -103,15 +103,3 @@ class Mediator:
             yield from ((fn, [text], kwargs) for fn, kwargs in options[matches[0]])
         except (IndexError, KeyError):
             yield (None, [text], {})
-
-    # TODO: Move to a mixin
-    def do_help(self, key, text):
-        """
-        help | ?
-
-        """
-        options = list(filter(
-            lambda x: len(x) > 1,
-            (i[0] for fn in self.active for i in CommandParser.expand_commands(fn, self.ensemble))
-        ))
-        return "\n".join("* {0}".format(i) for i in random.sample(options, min(3, len(options))))

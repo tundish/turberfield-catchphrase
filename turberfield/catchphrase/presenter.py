@@ -24,6 +24,7 @@ import importlib.resources
 import itertools
 import math
 import operator
+import string
 
 from turberfield.catchphrase.mediator import Mediator
 from turberfield.dialogue.model import Model
@@ -50,15 +51,8 @@ class Presenter:
         rv = None
         for n, p in enumerate(folder.paths):
             text = Presenter.load_dialogue(folder.pkg, p)
-            if isinstance(data, str):
-                text = text.format(data)
-            else:
-                try:
-                    data.update(**kwargs)
-                except AttributeError:
-                    text = text.format(*data)
-                else:
-                    text = text.format(**data)
+            if data:
+                text = string.Formatter().vformat(text, tuple(), data)
             rv = Presenter.build_from_text(text, index=n, ensemble=ensemble, strict=strict, roles=roles, path=p)
             if rv:
                 break
