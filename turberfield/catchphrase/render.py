@@ -67,7 +67,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
         name = "{0.firstname} {0.surname}".format(name) if hasattr(name, "firstname") else name
         if getattr(anim.element.persona, "history", []):  # As per Mediator
             tag = '<blockquote class="catchphrase-method-{0}">'.format(
-                anim.element.persona.history[-1].name.lower()
+                anim.element.persona.history[0].name.lower()
             )
         else:
             tag = "<blockquote>"
