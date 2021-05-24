@@ -65,9 +65,9 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
     def animated_line_to_html(anim):
         name = anim.element.persona.name if hasattr(anim.element.persona, "name") else ""
         name = "{0.firstname} {0.surname}".format(name) if hasattr(name, "firstname") else name
-        if getattr(anim.element.persona, "facts", []):  # As per Mediator
+        if getattr(anim.element.persona, "history", []):  # As per Mediator
             tag = '<blockquote class="catchphrase-method-{0}">'.format(
-                anim.element.persona.history[-1].fn.__name__.lower()
+                anim.element.persona.history[-1].name.lower()
             )
         else:
             tag = "<blockquote>"
