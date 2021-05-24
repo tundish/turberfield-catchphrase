@@ -64,11 +64,11 @@ class Mediator:
             return method
         return decorator
 
-    def __init__(self, *args, serializer=None, **kwargs):
+    def __init__(self, *args, maxlen=None, serializer=None, **kwargs):
         self.active = set(filter(None, (getattr(self, i, None) for i in args)))
         self.serializer = serializer or "\n".join
         self.facts = defaultdict(str)
-        self.history = deque()
+        self.history = deque(maxlen=maxlen)
         self.lookup = defaultdict(set)
 
     def __call__(self, fn, *args, **kwargs):
