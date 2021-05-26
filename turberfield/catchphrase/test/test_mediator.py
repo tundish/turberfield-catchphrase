@@ -50,18 +50,18 @@ class Trivial(Mediator):
 
 class MediatorMatchTests(unittest.TestCase):
 
-    def test_do_help(self):
-        mediator = Mediator()
-        mediator.active.add(mediator.do_help)
-        fn, args, kwargs = next(mediator.match("help"))
-        self.assertEqual(mediator.do_help, fn)
-        self.assertEqual(["help"], args)
+    def setUp(self):
+        self.mediator = Trivial("do_this", "do_that", "do_tother")
+
+    def test_do_that(self):
+        fn, args, kwargs = next(self.mediator.match("that?"))
+        self.assertEqual(self.mediator.do_that, fn)
+        self.assertEqual(["that?"], args)
         self.assertFalse(kwargs)
 
     def test_mismatch(self):
-        mediator = Mediator()
         cmd = "release the frog"
-        fn, args, kwargs = next(mediator.match(cmd))
+        fn, args, kwargs = next(self.mediator.match(cmd))
         self.assertIs(None, fn)
         self.assertEqual([cmd], args)
         self.assertFalse(kwargs)

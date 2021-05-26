@@ -47,13 +47,14 @@ class Presenter:
             return path.read_text(encoding="utf-8")
 
     @staticmethod
-    def build_presenter(folder, data, ensemble=[], strict=True, roles=1, **kwargs):
+    def build_presenter(folder, data, facts=None, ensemble=None, strict=True, roles=1):
         rv = None
         for n, p in enumerate(folder.paths):
             text = Presenter.load_dialogue(folder.pkg, p)
-            if data:
-                text = string.Formatter().vformat(text, tuple(), data)
-            rv = Presenter.build_from_text(text, index=n, ensemble=ensemble, strict=strict, roles=roles, path=p)
+            text = string.Formatter().vformat(text, data or "", facts or defaultdict(str))
+            rv = Presenter.build_from_text(
+                text, index=n, ensemble=ensemble or [], strict=strict, roles=roles, path=p
+            )
             if rv:
                 break
 
