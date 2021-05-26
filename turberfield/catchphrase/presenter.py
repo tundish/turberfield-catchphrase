@@ -51,7 +51,7 @@ class Presenter:
         rv = None
         for n, p in enumerate(folder.paths):
             text = Presenter.load_dialogue(folder.pkg, p)
-            text = string.Formatter().vformat(text, data or "", facts or defaultdict(str))
+            text = string.Formatter().vformat(text, tuple([data or ""]), facts or defaultdict(str))
             rv = Presenter.build_from_text(
                 text, index=n, ensemble=ensemble or [], strict=strict, roles=roles, path=p
             )
