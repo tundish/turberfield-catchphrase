@@ -11,6 +11,7 @@ Change Log
 
 * Refactor Mediator class
 * Refactor Presenter class
+* Retrieve casting from dialogue and pass in as Mediator parameter.
 
 TODO
 ----

@@ -85,7 +85,7 @@ class Mediator:
     def interpret(self, options):
         return next(iter(options), (None,) * 3)
 
-    def match(self, text, ensemble=[], cutoff=0.95):
+    def match(self, text, context={}, ensemble=[], cutoff=0.95):
         """
         FIXME: Docs
         """
@@ -100,6 +100,6 @@ class Mediator:
             or difflib.get_close_matches(text.strip(), options, cutoff=cutoff)
         )
         try:
-            yield from ((fn, [text], kwargs) for fn, kwargs in options[matches[0]])
+            yield from ((fn, [text, context], kwargs) for fn, kwargs in options[matches[0]])
         except (IndexError, KeyError):
-            yield (None, [text], {})
+            yield (None, [text, context], {})

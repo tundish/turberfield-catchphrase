@@ -66,8 +66,9 @@ class Presenter:
         selection = script.select(ensemble, roles=roles)
         if all(selection.values()) or (not strict and any(selection.values())):
             script.cast(selection)
+            casting = {next(iter(i.attributes.get("names", [])), None): i.persona for i in selection}
             model = script.run()
-            rv = Presenter(model, index=index, ensemble=ensemble, text=text)
+            rv = Presenter(model, index=index, casting=casting, ensemble=ensemble, text=text)
             for k, v in model.metadata:
                 rv.metadata[k].append(v)
             return rv
@@ -116,7 +117,7 @@ class Presenter:
                 continue
         return rv
 
-    def __init__(self, dialogue, index=None, scene=None, ensemble=None, text=""):
+    def __init__(self, dialogue, index=None, scene=None, casting=None, ensemble=None, text=""):
         self.index = index
         self.frames = [
             defaultdict(list, dict(
@@ -126,7 +127,8 @@ class Presenter:
             for i in getattr(dialogue, "shots", [])
             if scene is None or i.scene == scene
         ]
-        self.ensemble = ensemble
+        self.casting = casting or {}
+        self.ensemble = ensemble or []
         self.metadata = defaultdict(list)
         self.text = text
 

@@ -24,21 +24,21 @@ from turberfield.catchphrase.mediator import Mediator
 
 class Trivial(Mediator):
 
-    def do_this(self, this, text):
+    def do_this(self, this, text, context):
         """
         This?
 
         """
         return "Yes, this."
 
-    def do_that(self, this, text):
+    def do_that(self, this, text, context):
         """
         That?
 
         """
         return ["Yes.", "That."]
 
-    def do_tother(self, this, text):
+    def do_tother(self, this, text, context):
         """
         Or?
 
@@ -56,14 +56,14 @@ class MediatorMatchTests(unittest.TestCase):
     def test_do_that(self):
         fn, args, kwargs = next(self.mediator.match("that?"))
         self.assertEqual(self.mediator.do_that, fn)
-        self.assertEqual(["that?"], args)
+        self.assertEqual(["that?", {}], args)
         self.assertFalse(kwargs)
 
     def test_mismatch(self):
         cmd = "release the frog"
         fn, args, kwargs = next(self.mediator.match(cmd))
         self.assertIs(None, fn)
-        self.assertEqual([cmd], args)
+        self.assertEqual([cmd, {}], args)
         self.assertFalse(kwargs)
 
 
@@ -75,12 +75,12 @@ class MediatorFactsTests(unittest.TestCase):
     def test_do_that(self):
         fn, args, kwargs = next(self.mediator.match("that?"))
         self.assertEqual(self.mediator.do_that, fn)
-        self.assertEqual(["that?"], args)
+        self.assertEqual(["that?", {}], args)
         self.assertFalse(kwargs)
 
         fn, args, kwargs = self.mediator.interpret([(fn, args, kwargs)])
         self.assertEqual(self.mediator.do_that, fn)
-        self.assertEqual(["that?"], args)
+        self.assertEqual(["that?", {}], args)
 
         data = self.mediator(fn, *args, **kwargs)
         self.assertEqual("Yes.\nThat.", data)
