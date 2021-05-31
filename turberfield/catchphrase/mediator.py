@@ -69,7 +69,6 @@ class Mediator:
         self.serializer = serializer or "\n".join
         self.facts = defaultdict(str)
         self.history = deque(maxlen=maxlen)
-        self.lookup = defaultdict(set)
 
     def __call__(self, fn, *args, **kwargs):
         rv = fn(fn, *args, **kwargs)
