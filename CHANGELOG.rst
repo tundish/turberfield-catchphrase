@@ -12,11 +12,7 @@ Change Log
 * Refactor Mediator class
 * Refactor Presenter class
 * Retrieve casting from dialogue and pass in as Mediator parameter.
-
-TODO
-----
-
-* Make STORY.bookmark.drama.history[0].args[0] hint better to find last invoked drama method.
+* Record tuples store methods by name in history.
 
 0.19.0
 ======
