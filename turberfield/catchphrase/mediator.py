@@ -87,6 +87,7 @@ class Mediator:
     def match(self, text, context={}, ensemble=[], cutoff=0.95):
         """
         FIXME: Docs
+        FIXME: context -> casting
         """
         options = defaultdict(list)
         for fn in self.active:
