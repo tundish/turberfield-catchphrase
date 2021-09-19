@@ -163,10 +163,10 @@ class Presenter:
                 if react and m.object is None:
                     m.subject.set_state(m.state)
                 try:
-                    if m.subject.memories[-1].state != m.state:
-                        m.subject.memories.append(m)
+                    if m.subject.memories[0].state != m.state:
+                        m.subject.memories.appendleft(m)
                 except AttributeError:
                     m.subject.memories = deque([m], maxlen=6)
                 except IndexError:
-                    m.subject.memories.append(m)
+                    m.subject.memories.appendleft(m)
             return frame
