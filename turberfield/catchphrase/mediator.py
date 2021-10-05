@@ -77,7 +77,6 @@ class Mediator:
         if isinstance(rv, (list, tuple)):
             rv = self.serializer(rv)
 
-        self.facts[fn.__name__] = rv
         self.history.appendleft(self.Record(fn.__name__, args, kwargs, rv))
         return rv
 
