@@ -84,7 +84,7 @@ class MediatorFactsTests(unittest.TestCase):
 
         data = self.mediator(fn, *args, **kwargs)
         self.assertEqual("Yes.\nThat.", data)
-        self.assertEqual("Yes.\nThat.", self.mediator.facts[fn.__name__])
+        self.assertFalse(self.mediator.facts[fn.__name__])
 
     def test_do_this(self):
         fn, args, kwargs = self.mediator.interpret(self.mediator.match("That?"))
@@ -94,10 +94,7 @@ class MediatorFactsTests(unittest.TestCase):
         data = self.mediator(fn, *args, **kwargs)
 
         self.assertEqual("Yes, this.", data)
-        self.assertEqual(
-            {"do_this": "Yes, this.", "do_that": "Yes.\nThat."},
-            self.mediator.facts
-        )
+        self.assertFalse(self.mediator.facts[fn.__name__])
 
     def test_do_tother(self):
         fn, args, kwargs = self.mediator.interpret(self.mediator.match("That?"))
@@ -110,8 +107,5 @@ class MediatorFactsTests(unittest.TestCase):
         data = self.mediator(fn, *args, **kwargs)
 
         self.assertEqual("Or,\nMaybe;\nTother.", data)
-        self.assertEqual(
-            {"do_this": "Yes, this.", "do_that": "Yes.\nThat.", "do_tother": "Or,\nMaybe;\nTother."},
-            self.mediator.facts
-        )
+        self.assertFalse(self.mediator.facts[fn.__name__])
 
