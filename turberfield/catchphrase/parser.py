@@ -20,6 +20,7 @@
 import enum
 import inspect
 import itertools
+import operator
 
 
 class CommandParser:
@@ -29,7 +30,7 @@ class CommandParser:
     @staticmethod
     def unpack_annotation(name, annotation, ensemble, parent=None):
         if isinstance(annotation, str) and parent:
-            annotation = getattr(parent, annotation, [])
+            annotation = operator.attrgetter(annotation)(parent)
 
         if not isinstance(annotation, list):
             terms = [annotation]
