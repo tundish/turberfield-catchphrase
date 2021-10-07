@@ -6,6 +6,14 @@
 Change Log
 ::::::::::
 
+0.21.0
+======
+
+* Store memories in reverse order.
+* Allow positional arguments to `build_presenter`.
+* No longer update `facts` with command history.
+* Implement late-bound attribute access from annotations.
+
 0.20.0
 ======
 

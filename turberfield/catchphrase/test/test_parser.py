@@ -82,6 +82,28 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(rv[0][1], ParserTests.Liquid)
         self.assertIsInstance(rv[1][1], ParserTests.Mass)
 
+    def test_unpack_annotation_parent_attribute(self):
+        class Season(enum.Enum):
+            spring = "Spring"
+            summer = "Summer"
+            autumn = "Autumn"
+            winter = "Winter"
+
+            @property
+            def follows(self):
+                items = list(Season)
+                pos = (items.index(self) - 1) % len(items)
+                return items[pos]
+
+        self.assertEqual(Season.summer, Season.autumn.follows)
+        s = Season.autumn
+        rv = list(CommandParser.unpack_annotation("item", "follows", ensemble=[], parent=s))
+        self.assertTrue(rv)
+        self.assertTrue(all(isinstance(i, tuple) for i in rv), rv)
+        self.assertTrue(all(isinstance(i[0], str) for i in rv), rv)
+        self.assertTrue(all(isinstance(i[1], enum.Enum) for i in rv), rv)
+        self.assertEqual(Season.summer, rv[0][1])
+
     def test_expand_commands_no_preserver(self):
 
         thing = DataObject(name="thing")

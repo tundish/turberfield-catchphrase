@@ -27,17 +27,27 @@ class CommandParser:
     discard = ("a", "an", "any", "her", "his", "my", "some", "the", "their")
 
     @staticmethod
-    def unpack_annotation(name, annotation, ensemble):
-        terms = annotation if isinstance(annotation, list) else [annotation]
+    def unpack_annotation(name, annotation, ensemble, parent=None):
+        if isinstance(annotation, str) and parent:
+            annotation = getattr(parent, annotation, [])
+
+        if not isinstance(annotation, list):
+            terms = [annotation]
+        else:
+            terms = annotation
+
         for t in terms:
-            if issubclass(t, enum.Enum):
-                yield from (
-                    (name, i) for i in t for v in (
-                        [i.value] if isinstance(i.value, str) else i.value
+            if isinstance(t, type):
+                if issubclass(t, enum.Enum):
+                    yield from (
+                        (name, i) for i in t for v in (
+                            [i.value] if isinstance(i.value, str) else i.value
+                        )
                     )
-                )
+                else:
+                    yield from ((name, i) for i in ensemble if isinstance(i, t))
             else:
-                yield from ((name, i) for i in ensemble if isinstance(i, t))
+                yield (name, t)
 
     @staticmethod
     def parse_tokens(text, preserver=".", discard=None):
@@ -49,7 +59,7 @@ class CommandParser:
         ]
 
     @staticmethod
-    def expand_commands(method, ensemble=[]):
+    def expand_commands(method, ensemble=[], parent=None):
         """
         Read a method's docstring and expand it to create all possible matching
         command phrases. Calculate the corresponding keyword arguments.
@@ -60,7 +70,7 @@ class CommandParser:
         doc = method.func.__doc__ if hasattr(method, "func") else method.__doc__
         terms = list(filter(None, (i.strip() for line in doc.splitlines() for i in line.split("|"))))
         params = list(itertools.chain(
-            list(CommandParser.unpack_annotation(p.name, p.annotation, ensemble))
+            list(CommandParser.unpack_annotation(p.name, p.annotation, ensemble, parent))
             for p in inspect.signature(method, follow_wrapped=True).parameters.values()
             if p.annotation != inspect.Parameter.empty
         ))

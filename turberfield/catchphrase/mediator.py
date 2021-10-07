@@ -90,7 +90,7 @@ class Mediator:
         """
         options = defaultdict(list)
         for fn in self.active:
-            for k, v in CommandParser.expand_commands(fn, ensemble):
+            for k, v in CommandParser.expand_commands(fn, ensemble, parent=self):
                 options[k].append(v)
 
         tokens = CommandParser.parse_tokens(text, discard=CommandParser.discard)
