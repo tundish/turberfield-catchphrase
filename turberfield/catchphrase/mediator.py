@@ -53,17 +53,6 @@ class Mediator:
     """
     Record = namedtuple("Record", ["name", "args", "kwargs", "result"])
 
-    @classmethod
-    def param(cls, name, required, regex, values, tip):
-        """ Experimental. Do not use. """
-        def decorator(method):
-            p = cls.Parameter(name, required, regex, values, tip)
-            if not hasattr(method, "parameters"):
-                method.parameters = []
-            method.parameters.append(p)
-            return method
-        return decorator
-
     def __init__(self, *args, maxlen=None, serializer=None, **kwargs):
         self.active = set(filter(None, (getattr(self, i, None) for i in args)))
         self.serializer = serializer or "\n".join
