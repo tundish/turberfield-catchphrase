@@ -83,10 +83,9 @@ class Mediator:
     def interpret(self, options):
         return next(iter(options), (None,) * 3)
 
-    def match(self, text, context={}, ensemble=[], cutoff=0.95):
+    def match(self, text, context=None, ensemble=[], cutoff=0.95):
         """
         FIXME: Docs
-        FIXME: context -> casting
         """
         options = defaultdict(list)
         for fn in self.active:
