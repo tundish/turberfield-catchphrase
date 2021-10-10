@@ -56,14 +56,14 @@ class MediatorMatchTests(unittest.TestCase):
     def test_do_that(self):
         fn, args, kwargs = next(self.mediator.match("that?"))
         self.assertEqual(self.mediator.do_that, fn)
-        self.assertEqual(["that?", {}], args)
+        self.assertEqual(["that?", None], args)
         self.assertFalse(kwargs)
 
     def test_mismatch(self):
         cmd = "release the frog"
         fn, args, kwargs = next(self.mediator.match(cmd))
         self.assertIs(None, fn)
-        self.assertEqual([cmd, {}], args)
+        self.assertEqual([cmd, None], args)
         self.assertFalse(kwargs)
 
 
@@ -75,12 +75,12 @@ class MediatorFactsTests(unittest.TestCase):
     def test_do_that(self):
         fn, args, kwargs = next(self.mediator.match("that?"))
         self.assertEqual(self.mediator.do_that, fn)
-        self.assertEqual(["that?", {}], args)
+        self.assertEqual(["that?", None], args)
         self.assertFalse(kwargs)
 
         fn, args, kwargs = self.mediator.interpret([(fn, args, kwargs)])
         self.assertEqual(self.mediator.do_that, fn)
-        self.assertEqual(["that?", {}], args)
+        self.assertEqual(["that?", None], args)
 
         data = self.mediator(fn, *args, **kwargs)
         self.assertEqual("Yes.\nThat.", data)
