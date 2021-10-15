@@ -13,6 +13,7 @@ Change Log
 * Allow positional arguments to `build_presenter`.
 * No longer update `facts` with command history.
 * Implement late-bound attribute access from annotations.
+* Use `group_by_type` utility function.
 
 0.20.0
 ======

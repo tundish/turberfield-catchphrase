@@ -47,6 +47,7 @@ setup(
     },
     install_requires=[
         "turberfield-dialogue>=0.32.0",
+        "turberfield-utils>=0.38.0",
     ],
     extras_require={},
     tests_require=[],
