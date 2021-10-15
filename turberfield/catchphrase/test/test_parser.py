@@ -127,6 +127,11 @@ class ParserTests(unittest.TestCase):
         self.assertTrue(all(isinstance(i[1], enum.Enum) for i in rv), rv)
         self.assertEqual(Season.summer, rv[0][1])
 
+    def test_unpack_annotation_parent_attribute_mixed(self):
+        obj = SimpleNamespace(one=SimpleNamespace(two={"three": 3}))
+        rv = list(CommandParser.unpack_annotation("item", "one.two[three]", ensemble=[], parent=obj))
+        self.assertEqual(("item", 3), rv[0])
+
     def test_expand_commands_no_preserver(self):
 
         thing = DataObject(name="thing")
