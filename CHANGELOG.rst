@@ -14,6 +14,7 @@ Change Log
 * No longer update `facts` with command history.
 * Implement late-bound attribute access from annotations.
 * Use `group_by_type` utility function.
+* Always set state from a memory.
 
 0.20.0
 ======

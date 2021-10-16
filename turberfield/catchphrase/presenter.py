@@ -163,6 +163,9 @@ class Presenter:
             for m in frame[Model.Memory]:
                 if react and m.object is None:
                     m.subject.set_state(m.state)
+                elif react:
+                    m.object.set_state(m.state)
+
                 try:
                     if m.subject.memories[0].state != m.state:
                         m.subject.memories.appendleft(m)
