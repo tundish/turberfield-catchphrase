@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.22.0
+======
+
+* Update dependency pinning.
+
 0.21.0
 ======
 
