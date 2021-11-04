@@ -24,6 +24,7 @@ import importlib.resources
 import itertools
 import math
 import operator
+import pathlib
 import string
 
 from turberfield.catchphrase.mediator import Mediator
@@ -44,14 +45,19 @@ class Presenter:
         """
         FIXME: Docs
         """
+        if not pkg:
+            return pathlib.Path(resource).read_text(encoding="utf-8")
+
         with importlib.resources.path(pkg, resource) as path:
             return path.read_text(encoding="utf-8")
 
     @staticmethod
     def build_presenter(folder, *args, facts=None, ensemble=None, strict=True, roles=1):
         rv = None
-        for n, p in enumerate(folder.paths):
-            text = Presenter.load_dialogue(folder.pkg, p)
+        paths = getattr(folder, "paths", folder)
+        pkg = getattr(folder, "pkg", None)
+        for n, p in enumerate(paths):
+            text = Presenter.load_dialogue(pkg, p)
             text = string.Formatter().vformat(text, args, facts or defaultdict(str))
             rv = Presenter.build_from_text(
                 text, index=n, ensemble=ensemble or [], strict=strict, roles=roles, path=p

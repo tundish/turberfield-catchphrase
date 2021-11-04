@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.23.0
+======
+
+* relax requirement for Folder object when building a `Presenter`.
+
 0.22.0
 ======
 
