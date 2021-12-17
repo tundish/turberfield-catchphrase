@@ -65,11 +65,13 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
 </div>"""
 
     def animated_video_to_html(anim):
-        return f"""<div>
-<audio src="/audio/{anim.element.resource}" autoplay="autoplay"
-preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 1 else ""}>
-</audio>
-</div>"""
+        return f""""<figure>
+<video preload="metadata" poster="img/poster.jpg">
+<source src="/video/tears-of-steel-battle-clip-medium.mp4" type="video/mp4">
+<a href="/video/tears-of-steel-battle-clip-medium.mp4">Download MP4</a>
+</video>
+<figcaption></figcaption>
+</figure>"""
 
     @staticmethod
     def animate_controls(*args, delay=0, dwell=0, pause=0):
