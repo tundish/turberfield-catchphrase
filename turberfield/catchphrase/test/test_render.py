@@ -26,9 +26,14 @@ class RenderTests(unittest.TestCase):
         script.cast(script.select([]))
         model = Model(script.fP, script.doc)
         script.doc.walkabout(model)
+
         self.assertEqual(1, len(model.shots))
         shot = model.shots[0]
         self.assertEqual(1, len(shot.items))
         setter = shot.items[0]
         self.assertIsInstance(setter, Model.Audio)
 
+        presenter = Presenter(model)
+        animation = presenter.animate(presenter.frames[0])
+        rv = Renderer.animated_audio_to_html(animation[Model.Audio][0])
+        self.assertIn('src="/audio/crow_call-3s.mp3"', rv)
