@@ -65,3 +65,4 @@ class RenderTests(unittest.TestCase):
         animation = presenter.animate(presenter.frames[0])
         rv = Renderer.animated_video_to_html(animation[Model.Video][0])
         self.assertIn('src="/video/crow_flying-32s.mp4"', rv)
+        self.assertIn('poster="/img/cover.jpg"', rv)
