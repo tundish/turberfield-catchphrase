@@ -6,6 +6,13 @@
 Change Log
 ::::::::::
 
+0.24.0 TODO
+===========
+
+* Presenter.buiild_presenter to be a class method.
+* Presenter.buiild_from_text to be a class method.
+* Render video element.
+
 0.23.0
 ======
 
