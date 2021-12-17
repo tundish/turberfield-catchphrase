@@ -9,9 +9,11 @@ Change Log
 0.24.0 TODO
 ===========
 
-* Presenter.buiild_presenter to be a class method.
-* Presenter.buiild_from_text to be a class method.
+* Presenter.build_presenter to be a class method.
+* Presenter.build_from_text to be a class method.
+* Presenter.animated_audio_to_html to be a class method.
 * Render video element.
+* Repin to turberfield-dialogue 0.39.0.
 
 0.23.0
 ======

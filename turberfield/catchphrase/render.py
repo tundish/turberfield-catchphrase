@@ -64,6 +64,13 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
 </audio>
 </div>"""
 
+    def animated_video_to_html(anim):
+        return f"""<div>
+<audio src="/audio/{anim.element.resource}" autoplay="autoplay"
+preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 1 else ""}>
+</audio>
+</div>"""
+
     @staticmethod
     def animate_controls(*args, delay=0, dwell=0, pause=0):
         for arg in args:
@@ -166,10 +173,12 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
         dialogue = "\n".join(Renderer.animated_line_to_html(i) for i in frame[Model.Line])
         stills = "\n".join(Renderer.animated_still_to_html(i) for i in frame[Model.Still])
         audio = "\n".join(Renderer.animated_audio_to_html(i) for i in frame[Model.Audio])
+        video = "\n".join(Renderer.animated_video_to_html(i) for i in frame[Model.Video])
         last = frame[Model.Line][-1] if frame[Model.Line] else Presenter.Animation(0, 0, None)
         controls = "\n".join(Renderer.animate_controls(*controls, delay=last.delay + last.duration, dwell=0.3))
         return f"""
 {audio}
+{video}
 <aside class="catchphrase-reveal">
 {stills}
 </aside>
