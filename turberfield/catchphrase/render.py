@@ -57,14 +57,14 @@ class Renderer:
         return decorator
 
     @staticmethod
-    def animated_audio_to_html(anim, root="/", path="audio/"):
+    def animated_audio_to_html(anim, root="/", path="audio/", **kwargs):
         return f"""<div>
 <audio src="{root}{path}{anim.element.resource}" autoplay="autoplay"
 preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 1 else ""}>
 </audio>
 </div>"""
 
-    def animated_video_to_html(anim, root="/", path="video/", preload="metadata"):
+    def animated_video_to_html(anim, root="/", path="video/", preload="metadata", **kwargs):
         typ = "video/{0}".format(anim.element.resource.rsplit(".", 1)[-1])
         url = anim.element.url
         root, path = ("", "") if urllib.parse.urlparse(url).scheme else (root, path)
@@ -79,7 +79,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
 </figure>"""
 
     @staticmethod
-    def animate_controls(*args, delay=0, dwell=0, pause=0):
+    def animate_controls(*args, delay=0, dwell=0, pause=0, **kwargs):
         for arg in args:
             yield '<li style="animation-delay: {0:.2f}s; animation-duration: {1:.2f}s">'.format(delay, dwell)
             yield arg.strip()
@@ -87,7 +87,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
             delay += pause
 
     @staticmethod
-    def animated_line_to_html(anim):
+    def animated_line_to_html(anim, **kwargs):
         name = anim.element.persona.name if hasattr(anim.element.persona, "name") else ""
         name = "{0.firstname} {0.surname}".format(name) if hasattr(name, "firstname") else name
         if getattr(anim.element.persona, "history", []):  # As per Mediator
@@ -113,7 +113,7 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
         )
 
     @staticmethod
-    def animated_still_to_html(anim):
+    def animated_still_to_html(anim, **kwargs):
         return f"""
 <div style="animation-duration: {anim.duration}s; animation-delay: {anim.delay}s">
 <img src="/img/{anim.element.resource}" alt="{anim.element.package} {anim.element.resource}" />
@@ -176,13 +176,15 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
         return "{tag} {{\n{entries}\n}}".format(tag=tag, entries=entries)
 
     @staticmethod
-    def render_animated_frame_to_html(frame, controls=[]):
-        dialogue = "\n".join(Renderer.animated_line_to_html(i) for i in frame[Model.Line])
-        stills = "\n".join(Renderer.animated_still_to_html(i) for i in frame[Model.Still])
-        audio = "\n".join(Renderer.animated_audio_to_html(i) for i in frame[Model.Audio])
-        video = "\n".join(Renderer.animated_video_to_html(i) for i in frame[Model.Video])
+    def render_animated_frame_to_html(frame, controls=[], **kwargs):
+        dialogue = "\n".join(Renderer.animated_line_to_html(i, **kwargs) for i in frame[Model.Line])
+        stills = "\n".join(Renderer.animated_still_to_html(i, **kwargs) for i in frame[Model.Still])
+        audio = "\n".join(Renderer.animated_audio_to_html(i, **kwargs) for i in frame[Model.Audio])
+        video = "\n".join(Renderer.animated_video_to_html(i, **kwargs) for i in frame[Model.Video])
         last = frame[Model.Line][-1] if frame[Model.Line] else Presenter.Animation(0, 0, None)
-        controls = "\n".join(Renderer.animate_controls(*controls, delay=last.delay + last.duration, dwell=0.3))
+        controls = "\n".join(
+            Renderer.animate_controls(*controls, delay=last.delay + last.duration, dwell=0.3, **kwargs)
+        )
         return f"""
 {audio}
 {video}
