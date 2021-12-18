@@ -93,5 +93,5 @@ class RenderTests(unittest.TestCase):
         rv = Renderer.animated_video_to_html(animation[Model.Video][0])
         self.assertIn('src="http://vimeo.com/abcdef/crow_flying-32s.mp4"', rv)
         self.assertIn('poster="/img/cover.jpg"', rv)
-        self.assertIn('<a href="http://vimeo.com/abcdef">', rv)
+        self.assertIn('<a href="http://vimeo.com/abcdef/">', rv)
         self.assertIn("Download MP4", rv)

@@ -67,7 +67,8 @@ preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 
     def animated_video_to_html(anim, root="/", path="video/", preload="metadata"):
         typ = "video/{0}".format(anim.element.resource.rsplit(".", 1)[-1])
         url = anim.element.url
-        link = '<a href="{0}">Download {1}</a>'.format(url, typ.upper()) if url else ""
+        root, path = ("", "") if urllib.parse.urlparse(url).scheme else (root, path)
+        link = '<a href="{0}">Download {1}</a>'.format(url, typ.split("/")[-1].upper()) if url else ""
         poster = f'poster="{anim.element.poster}"' if anim.element.poster else ""
         return f""""<figure>
 <video preload="{preload}" {poster}>
