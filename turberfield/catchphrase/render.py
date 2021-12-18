@@ -57,18 +57,22 @@ class Renderer:
         return decorator
 
     @staticmethod
-    def animated_audio_to_html(anim):
+    def animated_audio_to_html(anim, root="/", path="audio/"):
         return f"""<div>
-<audio src="/audio/{anim.element.resource}" autoplay="autoplay"
+<audio src="{root}{path}{anim.element.resource}" autoplay="autoplay"
 preload="auto" {'loop="loop"' if anim.element.loop and int(anim.element.loop) > 1 else ""}>
 </audio>
 </div>"""
 
-    def animated_video_to_html(anim):
+    def animated_video_to_html(anim, root="/", path="video/", preload="metadata"):
+        typ = "video/{0}".format(anim.element.resource.rsplit(".", 1)[-1])
+        url = anim.element.url
+        link = '<a href="{0}">Download {1}</a>'.format(url, typ.upper()) if url else ""
+        poster = f'poster="{anim.element.poster}"' if anim.element.poster else ""
         return f""""<figure>
-<video preload="metadata" poster="img/poster.jpg">
-<source src="/video/tears-of-steel-battle-clip-medium.mp4" type="video/mp4">
-<a href="/video/tears-of-steel-battle-clip-medium.mp4">Download MP4</a>
+<video preload="{preload}" {poster}>
+<source src="{root}{path}{anim.element.resource}" type="{typ}">
+{link}
 </video>
 <figcaption></figcaption>
 </figure>"""

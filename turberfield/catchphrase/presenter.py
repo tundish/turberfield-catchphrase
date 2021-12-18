@@ -114,6 +114,14 @@ class Presenter:
         )
 
     @staticmethod
+    def animate_video(seq):
+        """ Generate animations for video effects."""
+        yield from (
+            Presenter.Animation(asset.offset, asset.duration, asset)
+            for asset in seq
+        )
+
+    @staticmethod
     def refresh_animations(frame, min_val=8):
         rv = min_val
         for typ in (Model.Line, Model.Still, Model.Audio):
@@ -162,6 +170,7 @@ class Presenter:
             )
             frame[Model.Audio] = list(self.animate_audio(frame[Model.Audio]))
             frame[Model.Still] = list(self.animate_stills(frame[Model.Still]))
+            frame[Model.Video] = list(self.animate_video(frame[Model.Video]))
             for p in frame[Model.Property]:
                 if react and p.object is not None:
                     setattr(p.object, p.attr, p.val)
