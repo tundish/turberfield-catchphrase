@@ -51,15 +51,15 @@ class Presenter:
         with importlib.resources.path(pkg, resource) as path:
             return path.read_text(encoding="utf-8")
 
-    @staticmethod
-    def build_presenter(folder, *args, facts=None, ensemble=None, strict=True, roles=1):
+    @classmethod
+    def build_presenter(cls, folder, *args, facts=None, ensemble=None, strict=True, roles=1):
         rv = None
         paths = getattr(folder, "paths", folder)
         pkg = getattr(folder, "pkg", None)
         for n, p in enumerate(paths):
-            text = Presenter.load_dialogue(pkg, p)
+            text = cls.load_dialogue(pkg, p)
             text = string.Formatter().vformat(text, args, facts or defaultdict(str))
-            rv = Presenter.build_from_text(
+            rv = cls.build_from_text(
                 text, index=n, ensemble=ensemble or [], strict=strict, roles=roles, path=p
             )
             if rv:
@@ -67,15 +67,15 @@ class Presenter:
 
         return rv
 
-    @staticmethod
-    def build_from_text(text, index=None, ensemble=[], strict=True, roles=1, path="inline"):
+    @classmethod
+    def build_from_text(cls, text, index=None, ensemble=[], strict=True, roles=1, path="inline"):
         script = SceneScript(path, doc=SceneScript.read(text))
         selection = script.select(ensemble, roles=roles)
         if all(selection.values()) or (not strict and any(selection.values())):
             script.cast(selection)
             casting = {next(iter(i.attributes.get("names", [])), None): i.persona for i in selection}
             model = script.run()
-            rv = Presenter(model, index=index, casting=casting, ensemble=ensemble, text=text)
+            rv = cls(model, index=index, casting=casting, ensemble=ensemble, text=text)
             for k, v in model.metadata:
                 rv.metadata[k].append(v)
             return rv
@@ -84,28 +84,28 @@ class Presenter:
     def allows(item: Model.Condition):
         return Performer.allows(item)
 
-    @staticmethod
-    def animate_audio(seq):
+    @classmethod
+    def animate_audio(cls, seq):
         """ Generate animations for audio effects."""
         yield from (
-            Presenter.Animation(asset.offset, asset.duration, asset)
+            cls.Animation(asset.offset, asset.duration, asset)
             for asset in seq
         )
 
-    @staticmethod
-    def animate_lines(seq, dwell, pause):
+    @classmethod
+    def animate_lines(cls, seq, dwell, pause):
         """ Generate animations for lines of dialogue."""
         offset = 0
         for line in seq:
             duration = pause + dwell * line.text.count(" ")
-            yield Presenter.Animation(offset, duration, line)
+            yield cls.Animation(offset, duration, line)
             offset += duration
 
-    @staticmethod
-    def animate_stills(seq):
+    @classmethod
+    def animate_stills(cls, seq):
         """ Generate animations for still images."""
         yield from (
-            Presenter.Animation(
+            cls.Animation(
                 getattr(still, "offset", 0) or 0 / 1000,
                 getattr(still, "duration", 0) or 0 / 1000,
                 still
@@ -113,16 +113,16 @@ class Presenter:
             for still in seq
         )
 
-    @staticmethod
-    def animate_video(seq):
+    @classmethod
+    def animate_video(cls, seq):
         """ Generate animations for video effects."""
         yield from (
-            Presenter.Animation(asset.offset, asset.duration, asset)
+            cls.Animation(asset.offset, asset.duration, asset)
             for asset in seq
         )
 
     @staticmethod
-    def refresh_animations(frame, min_val=8):
+    def refresh_animations(cls, frame, min_val=8):
         rv = min_val
         for typ in (Model.Line, Model.Still, Model.Audio):
             try:
