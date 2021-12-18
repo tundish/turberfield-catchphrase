@@ -6,13 +6,12 @@
 Change Log
 ::::::::::
 
-0.24.0 TODO
-===========
+0.24.0
+======
 
-* Presenter.build_presenter to be a class method.
-* Presenter.build_from_text to be a class method.
-* Presenter.animated_audio_to_html to be a class method.
-* Render video element.
+* Presenter functions become class methods.
+* Renderer functions become class methods.
+* Create render method for video elements.
 * Repin to turberfield-dialogue 0.39.0.
 
 0.23.0
