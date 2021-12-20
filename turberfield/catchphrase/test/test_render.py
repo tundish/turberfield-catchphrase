@@ -95,3 +95,34 @@ class RenderTests(unittest.TestCase):
         self.assertIn('poster="/img/cover.jpg"', rv)
         self.assertIn('<a href="http://vimeo.com/abcdef/">', rv)
         self.assertIn("Download MP4", rv)
+
+    def test_render_video_url(self):
+        text = textwrap.dedent("""
+        .. fx:: pot.mp4 crow_flying-32s.mp4
+            :offset:    0
+            :duration:  32000
+            :loop:      1
+            :label:     As the crow flies
+            :poster:    /img/cover.jpg
+            :url:       http://vimeo.com/abcdef/
+
+        """)
+        uid = uuid.uuid4()
+        script = SceneScript("inline", doc=SceneScript.read(text))
+        script.cast(script.select([]))
+        model = Model(script.fP, script.doc)
+        script.doc.walkabout(model)
+
+        self.assertEqual(1, len(model.shots))
+        shot = model.shots[0]
+        self.assertEqual(1, len(shot.items))
+        setter = shot.items[0]
+        self.assertIsInstance(setter, Model.Video)
+
+        presenter = Presenter(model)
+        animation = presenter.animate(presenter.frames[0])
+        rv = Renderer.animated_video_to_html(animation[Model.Video][0])
+        self.assertIn('src="http://vimeo.com/abcdef/"', rv)
+        self.assertIn('poster="/img/cover.jpg"', rv)
+        self.assertIn('<a href="http://vimeo.com/abcdef/">', rv)
+        self.assertIn("Download MP4", rv)
