@@ -6,6 +6,11 @@
 Change Log
 ::::::::::
 
+0.25.0
+======
+
+* Add rendering for video FX.
+
 0.24.0
 ======
 
